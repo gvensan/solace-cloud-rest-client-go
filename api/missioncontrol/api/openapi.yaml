@@ -1,0 +1,4622 @@
+openapi: 3.0.1
+info:
+  description: Documentation for Mission Control API
+  title: MISSION CONTROL
+  version: V2
+servers:
+- description: Solace PubSub+ Cloud US EAST Region
+  url: https://api.solace.cloud
+- description: Solace PubSub+ Cloud AUS Region
+  url: https://api.solacecloud.com.au
+security:
+- bearerAuth: []
+paths:
+  /api/v2/missionControl/eventBrokerServices/{serviceId}/clientProfiles/{name}:
+    delete:
+      description: Delete a client profile using the identifier for the event broker
+        service and the name of the client profile.
+      operationId: deleteClientProfile
+      parameters:
+      - description: The unique identifier of the event broker service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The name of the client profile.
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: Operation accepted.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: "Could not find the client profile with name, some_name."
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Delete a client profile
+      tags:
+      - ClientProfiles
+    get:
+      description: Get the details of a client profile using its name.
+      operationId: getClientProfile
+      parameters:
+      - description: The identifier of the event broker service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The name of the client profile.
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: some_client_profile
+                  allowGuaranteedMsgSendEnabled: true
+                  allowGuaranteedMsgReceiveEnabled: true
+                  compressionEnabled: true
+                  replicationAllowClientConnectWhenStandbyEnabled: true
+                  allowTransactedSessionsEnabled: false
+                  allowBridgeConnectionsEnabled: false
+                  allowGuaranteedEndpointCreateEnabled: false
+                  allowSharedSubscriptionsEnabled: false
+                  apiQueueManagementCopyFromOnCreateName: some-queue-template-name
+                  apiQueueManagementCopyFromOnCreateTemplateName: some-queue-template-name
+                  apiTopicEndpointManagementCopyFromOnCreateName: some-topic-template-name
+                  apiTopicEndpointManagementCopyFromOnCreateTemplateName: some-topic-tamplate-name
+                  serviceMinKeepaliveTimeout: 20
+                  serviceSmfMinKeepaliveEnabled: true
+                  serviceWebInactiveTimeout: 100
+                  serviceWebMaxPayload: 1000
+                  maxConnectionCountPerClientUsername: 100000
+                  serviceSmfMaxConnectionCountPerClientUsername: 100000
+                  serviceWebMaxConnectionCountPerClientUsername: 100000
+                  maxEndpointCountPerClientUsername: 80000
+                  maxEgressFlowCount: 10000
+                  maxIngressFlowCount: 500000
+                  maxSubscriptionCount: 1
+                  maxTransactedSessionCount: 16000
+                  maxTransactionCount: 25000
+                  queueGuaranteed1MaxDepth: 262144
+                  queueGuaranteed1MinMsgBurst: 262144
+                  queueDirect1MaxDepth: 262144
+                  queueDirect1MinMsgBurst: 262144
+                  queueDirect2MaxDepth: 262144
+                  queueDirect2MinMsgBurst: 262144
+                  queueDirect3MaxDepth: 262144
+                  queueDirect3MinMsgBurst: 262144
+                  queueControl1MaxDepth: 262144
+                  queueControl1MinMsgBurst: 262144
+                  tcpCongestionWindowSize: 7826
+                  tcpKeepaliveCount: 5
+                  tcpKeepaliveIdleTime: 120
+                  tcpKeepaliveInterval: 30
+                  tcpMaxSegmentSize: 1460
+                  tcpMaxWindowSize: 65536
+                  elidingDelay: 60000
+                  elidingEnabled: true
+                  elidingMaxTopicCount: 32000
+                  rejectMsgToSenderOnNoSubscriptionMatchEnabled: true
+                  tlsAllowDowngradeToPlainTextEnabled: true
+                  eventClientProvisionedEndpointSpoolUsageThreshold:
+                    setPercent: 50
+                    clearPercent: 50
+              schema:
+                $ref: '#/components/schemas/ClientProfileResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: "Could not find the client profile with name, some_name."
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a specific client profile for event broker service by name
+      tags:
+      - ClientProfiles
+    patch:
+      description: "Update the configuration of an existing client profile. You can\
+        \ provide any combination of supported fields. If a field is not provided,\
+        \ then it will not be updated."
+      operationId: updateClientProfile
+      parameters:
+      - description: The unique identifier of the event broker service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The name of the client profile.
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientProfileRequest'
+        description: The configuration to update for the client profile.
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: Accepted.
+        "400":
+          content:
+            application/json:
+              example:
+                message: A JSON parse error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: "Could not find the client profile with name, some_name."
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Update a client profile
+      tags:
+      - ClientProfiles
+    put:
+      description: "Replace the configuration of an existing client profile. You can\
+        \ provide any combination of supported fields. If a field is not provided,\
+        \ then it will be set to default value."
+      operationId: replaceClientProfile
+      parameters:
+      - description: The unique identifier of the event broker service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientProfileRequest'
+        description: The fields to update the configuration for the client profile.
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: Accepted.
+        "400":
+          content:
+            application/json:
+              example:
+                message: A JSON parse error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: "Could not find the client profile with name, some_name."
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Replace a client profile
+      tags:
+      - ClientProfiles
+  /api/v2/missionControl/eventBrokerServices:
+    get:
+      description: Get a listing of event broker services.
+      operationId: getServices
+      parameters:
+      - description: The page number to retrieve.
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: The number of event brokers to return per page.
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: 0p0ekrdene3
+                  type: service
+                  name: My-First-Service
+                  createdTime: 2023-01-10T14:40:18.000Z
+                  ownedBy: voufg5j0ic9
+                  infrastructureId: o6ggjgs9jd8
+                  datacenterId: gke-gcp-us-central1-a
+                  serviceClassId: DEVELOPER
+                  adminState: start
+                  creationState: completed
+                  locked: false
+                meta:
+                  pagination:
+                    pageNumber: 1
+                    nextPage: null
+                    count: 1
+                    totalPages: 1
+                    pageSize: 100
+              schema:
+                $ref: '#/components/schemas/GetAllServicesResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a list of event broker services
+      tags:
+      - Event Broker Services
+    post:
+      description: "To create an event broker service, you require a datacenter, service\
+        \ class, and name."
+      operationId: createService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceRequest'
+        description: The new service specification.
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: Accepted.
+        "400":
+          content:
+            application/json:
+              example:
+                message: An entity of type service was passed in an invalid format.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+                validationDetails:
+                  serviceClassId:
+                  - must not be blank
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Create an event broker service
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/eventBrokerServices/{serviceId}/clientProfiles:
+    get:
+      description: Get the client profiles that are available for the event broker
+        sevice.
+      operationId: getClientProfiles
+      parameters:
+      - description: The identifier of the event broker service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The page number to retrieve.
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: The number of client profiles to return per page.
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: The sorting criteria for the list of client profiles.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          default: name:asc
+          example: name:asc
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - name: some_client_profile
+                  id: some_client_profile
+                  allowGuaranteedMsgSendEnabled: true
+                  allowGuaranteedMsgReceiveEnabled: true
+                  allowTransactedSessionsEnabled: true
+                  allowBridgeConnectionsEnabled: true
+                  allowGuaranteedEndpointCreateEnabled: true
+                - name: some_client_profile2
+                  id: some_client_profile2
+                  allowGuaranteedMsgSendEnabled: false
+                  allowGuaranteedMsgReceiveEnabled: false
+                  allowTransactedSessionsEnabled: true
+                  allowBridgeConnectionsEnabled: true
+                  allowGuaranteedEndpointCreateEnabled: false
+                meta:
+                  pagination:
+                    pageSize: 20
+                    totalPages: 2
+                    count: 23
+                    nextPage: 2
+                    pageNumber: 1
+              schema:
+                $ref: '#/components/schemas/ClientProfilesResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a list of client profiles
+      tags:
+      - ClientProfiles
+    post:
+      description: "To create a client profile, you require a list of parameters."
+      operationId: createClientProfile
+      parameters:
+      - description: The identifier of the event broker service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientProfileRequest'
+        description: The new client profile specification.
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: Accepted.
+        "400":
+          content:
+            application/json:
+              example:
+                message: An entity of type client profile was passed in an invalid
+                  format.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+                validationDetails:
+                  name:
+                  - must not be blank
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Create a client profile
+      tags:
+      - ClientProfiles
+  /api/v2/missionControl/eventBrokerServices/{id}:
+    delete:
+      description: Delete a service using its unique identifier.
+      operationId: deleteService
+      parameters:
+      - description: The unique identifier of the service.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: Operation accepted.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: Could not find the event broker service with id 4o5kyf4x5504.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Delete an event broker service
+      tags:
+      - Event Broker Services
+    get:
+      description: Get the details of an event broker service using its identifier.
+        Optional information an be requested using the expand operator.
+      operationId: getService
+      parameters:
+      - description: The unique identifier of the service.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "Additional information to retrieve for event broker service,\
+          \ such as connection endpoint information or broker details."
+        explode: true
+        in: query
+        name: expand
+        required: false
+        schema:
+          items:
+            enum:
+            - broker
+            - serviceConnectionEndpoints
+            type: string
+          maxItems: 2
+          minItems: 0
+          type: array
+          uniqueItems: true
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: 4o5kyf4x550
+                  type: service
+                  name: My-First-Service
+                  createdTime: 2023-01-09T19:03:45.000Z
+                  ownedBy: zp30k96zr63
+                  infrastructureId: hhi2d6glthe
+                  datacenterId: gke-gcp-us-central1-a
+                  serviceClassId: DEVELOPER
+                  adminState: start
+                  creationState: completed
+                  locked: false
+                  serviceConnectionEndpoints:
+                  - id: kys7hiopi9t
+                    type: serviceConnectionEndpoint
+                    name: Public Endpoint
+                    description: A service connection endpoint.
+                    accessType: public
+                    k8sServiceType: LoadBalancer
+                    k8sServiceId: developer-service-dev-kys7hiopi9t-solace
+                    hostNames:
+                    - mr-connection-kys7hiopi9t.messaging.net
+                    ports:
+                      serviceWebPlainTextListenPort: 0
+                      serviceRestIncomingTlsListenPort: 9443
+                      serviceManagementTlsListenPort: 943
+                      serviceAmqpPlainTextListenPort: 0
+                      serviceMqttWebSocketListenPort: 0
+                      serviceRestIncomingPlainTextListenPort: 0
+                      serviceWebTlsListenPort: 443
+                      serviceSmfCompressedListenPort: 0
+                      serviceMqttPlainTextListenPort: 0
+                      serviceSmfPlainTextListenPort: 0
+                      serviceAmqpTlsListenPort: 5671
+                      serviceMqttTlsListenPort: 8883
+                      serviceSmfTlsListenPort: 55443
+                      serviceMqttTlsWebSocketListenPort: 8443
+                      managementSshTlsListenPort: 0
+                  broker:
+                    version: 10.0.1.62
+                    versionFamily: "10.0"
+                    servicePackageId: DS-V21.2
+                    maxSpoolUsage: 10
+                    diskSize: 20
+                    redundancyGroupSslEnabled: false
+                    configSyncSslEnabled: false
+                    monitoringMode: basic
+                    tlsStandardDomainCertificateAuthoritiesEnabled: true
+                    cluster:
+                      name: cluster-gke-gcp-us-central1-a-hhi2d6glthe
+                      password: mnj0hi5t2ljv4
+                      remoteAddress: mr-connection-kys7hiopi9t.messaging.net
+                      primaryRouterName: developerservicedevhhi2d6glthesolaceprimary0
+                      supportedAuthenticationMode:
+                      - Basic
+                    managementReadOnlyLoginCredential:
+                      username: My-First-Service-view
+                      password: ciqs9h2hpuelk68aq
+                      token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAiZ2Jyb21maWVsZC1kZXY
+                    msgVpns:
+                    - msgVpnName: My-First-Service
+                      authenticationBasicEnabled: true
+                      authenticationBasicType: INTERNAL
+                      authenticationClientCertEnabled: false
+                      authenticationClientCertValidateDateEnabled: false
+                      clientProfiles:
+                      - name: default
+                      enabled: true
+                      eventLargeMsgThreshold: 11
+                      managementAdminLoginCredential:
+                        username: My-First-Service-admin
+                        password: cs9ikq361tsmsmod
+                        token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAiZ2Jyb21maWVsZC1kZXYtM
+                      serviceLoginCredential:
+                        username: solace-cloud-client
+                        password: g3ido8ck02u5n6n2
+                      maxConnectionCount: 100
+                      maxEgressFlowCount: 100
+                      maxEndpointCount: 100
+                      maxIngressFlowCount: 100
+                      maxMsgSpoolUsage: 10000
+                      maxSubscriptionCount: 1000
+                      maxTransactedSessionCount: 100
+                      maxTransactionCount: 500
+                      sempOverMessageBus:
+                        sempOverMsgBusEnabled: false
+                        sempAccessToShowCmdsEnabled: false
+                        sempAccessToAdminCmdsEnabled: false
+                        sempAccessToClientAdminCmdsEnabled: false
+                        sempAccessToCacheCmdsEnabled: false
+                      subDomainName: mr-connection-kys7hiopi9t.messaging.net
+                      truststoreUri: https://
+              schema:
+                $ref: '#/components/schemas/GetServiceResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: Could not find the event broker service with id 4o5kyf4x5504.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get an event broker service
+      tags:
+      - Event Broker Services
+    patch:
+      description: "Update the configuration of an existing event broker service.\
+        \ You can provide any combination of supported fields. If a field is not provided,\
+        \ then it will not be updated."
+      operationId: updateService
+      parameters:
+      - description: The unique identifier of the event broker service.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceRequest'
+        description: The fields to update the configuration for the event broker service.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetServiceResponse'
+          description: OK.
+        "400":
+          content:
+            application/json:
+              example:
+                message: A JSON parse error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: Could not find the event broker service with id 4o5kyf4x5504.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Update an event broker service
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/serviceClasses:
+    get:
+      description: Get the service classes that are available in the account (or organization).
+      operationId: getServiceClasses
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: ENTERPRISE_1K_STANDALONE
+                  type: serviceClass
+                  name: Enterprise 1K Standalone
+                  vpnConnections: 1000
+                  brokerScalingTier: "1000"
+                  vpnMaxSpoolSize: 50
+                  maxNumberVpns: 1
+                  highAvailabilityCapable: false
+                - id: ENTERPRISE_10K_HIGHAVAILABILITY
+                  type: serviceClass
+                  name: Enterprise 10K
+                  vpnConnections: 10000
+                  brokerScalingTier: "10000"
+                  vpnMaxSpoolSize: 300
+                  maxNumberVpns: 1
+                  highAvailabilityCapable: true
+              schema:
+                $ref: '#/components/schemas/ServiceClassesResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a list of service classes
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/serviceClasses/{id}:
+    get:
+      description: Get the details of a service class using its identifier.
+      operationId: getServiceClass
+      parameters:
+      - description: The unique identifier of the service class.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          enum:
+          - DEVELOPER
+          - ENTERPRISE_250_STANDALONE
+          - ENTERPRISE_1K_STANDALONE
+          - ENTERPRISE_5K_STANDALONE
+          - ENTERPRISE_10K_STANDALONE
+          - ENTERPRISE_50K_STANDALONE
+          - ENTERPRISE_100K_STANDALONE
+          - ENTERPRISE_250_HIGHAVAILABILITY
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_5K_HIGHAVAILABILITY
+          - ENTERPRISE_10K_HIGHAVAILABILITY
+          - ENTERPRISE_50K_HIGHAVAILABILITY
+          - ENTERPRISE_100K_HIGHAVAILABILITY
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: ENTERPRISE_1K_HIGHAVAILABILITY
+                  type: serviceClass
+                  name: Enterprise 1K
+                  vpnConnections: 1000
+                  brokerScalingTier: "1000"
+                  vpnMaxSpoolSize: 50
+                  maxNumberVpns: 1
+                  highAvailabilityCapable: true
+              schema:
+                $ref: '#/components/schemas/ServiceClassResponse'
+          description: OK.
+        "400":
+          content:
+            application/json:
+              example:
+                message: "Invalid parameter: id. Must be one of the following types:\
+                  \ DEVELOPER,ENTERPRISE_250_HIGHAVAILABILITY,ENTERPRISE_1K_HIGHAVAILABILITY,ENTERPRISE_5K_HIGHAVAILABILITY,ENTERPRISE_10K_HIGHAVAILABILITY,ENTERPRISE_50K_HIGHAVAILABILITY,ENTERPRISE_100K_HIGHAVAILABILITY,ENTERPRISE_250_STANDALONE,ENTERPRISE_1K_STANDALONE,ENTERPRISE_5K_STANDALONE,ENTERPRISE_10K_STANDALONE,ENTERPRISE_50K_STANDALONE,ENTERPRISE_100K_STANDALONE"
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid Parameter.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: Could not find service 4o5kyf4x5504.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a specific service class by identifier
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/eventBrokerServices/{serviceId}/operations/{operationId}:
+    get:
+      description: "Get the status of an operation that being performed on an event\
+        \ broker service. To get the operation, you provide identifier of the operation\
+        \ and the identifier of the event broker service."
+      operationId: getServiceOperation
+      parameters:
+      - description: The unique identifier of the service.
+        explode: false
+        in: path
+        name: serviceId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the operation being performed on the event
+          broker service.
+        explode: false
+        in: path
+        name: operationId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: Could not find the event broker service with id 4o5kyf4x5504.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get the status of a service operation
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/datacenters:
+    get:
+      description: Get the datacenters that are available for the account (or organization).
+      operationId: getDatacenters
+      parameters:
+      - description: The page number to retrieve.
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: The number of datacenters to return per page.
+        explode: true
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: The sorting criteria for the list of datacenters.
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          default: "name:asc,datacenterType:asc"
+          example: "name:asc,datacenterType:asc"
+          type: string
+        style: form
+      - description: The datacenter type to filter datacenters list.
+        explode: true
+        in: query
+        name: datacenterType
+        required: false
+        schema:
+          enum:
+          - Unknown
+          - SolacePublic
+          - SolaceDedicated
+          - CustomerCloud
+          - CustomerOnPrem
+          type: string
+        style: form
+      - description: The provider name to filter datacenters list.
+        explode: true
+        in: query
+        name: provider
+        required: false
+        schema:
+          enum:
+          - aks
+          - aws
+          - azure
+          - eks
+          - gcp
+          - k8s
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                - id: gke-gcp-us-central1-a
+                  type: datacenter
+                  name: gke-gcp-us-central1-a
+                  datacenterType: Unknown
+                  provider: GKE
+                  operState: up
+                  datacenterLocation:
+                    lng: "-95"
+                    lat: "41"
+                    continent: North America
+                  createdBy: voufg5j0ic9
+                  createdTime: 2023-01-10T14:40:18.000Z
+                  spoolScaleUpCapabilityInfo:
+                    spoolScaleUpCapabilityState: unknown
+                    spoolScaleUpTestTimestamp: 2022-03-14T15:01:34.000Z
+                - id: aws-us-east-1b
+                  type: datacenter
+                  name: aws-us-east-1b
+                  datacenterType: SolacePublic
+                  provider: aws
+                  operState: up
+                  datacenterLocation:
+                    lng: "-78"
+                    lat: "38"
+                    continent: North America
+                  createdBy: voufg5j0ic9
+                  createdTime: 2023-01-10T14:40:18.000Z
+                  spoolScaleUpCapabilityInfo:
+                    spoolScaleUpCapabilityState: unknown
+                    spoolScaleUpTestTimestamp: 2022-03-14T15:01:34.000Z
+                meta:
+                  pagination:
+                    pageSize: 20
+                    totalPages: 2
+                    count: 23
+                    nextPage: 2
+                    pageNumber: 1
+              schema:
+                $ref: '#/components/schemas/DatacentersResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a list of datacenters
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/datacenters/{id}:
+    get:
+      description: Get the details of a datacenter using its identifier.
+      operationId: getDatacenter
+      parameters:
+      - description: The unique identifier of the datacenter.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                data:
+                  id: gke-gcp-us-central1-a
+                  type: datacenter
+                  name: gke-gcp-us-central1-a
+                  datacenterType: Unknown
+                  provider: GKE
+                  operState: up
+                  datacenterLocation:
+                    lng: "-95"
+                    lat: "41"
+                    continent: North America
+                  createdBy: voufg5j0ic9
+                  createdTime: 2023-01-10T14:40:18.000Z
+                  spoolScaleUpCapabilityInfo:
+                    spoolScaleUpCapabilityState: unknown
+                    spoolScaleUpTestTimestamp: 2022-03-14T15:01:34.000Z
+              schema:
+                $ref: '#/components/schemas/DatacenterResponse'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
+              example:
+                message: Could not find the datacenter with id gke-gcp-us-central1-a.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get a specific datacenter by identifier
+      tags:
+      - Event Broker Services
+  /api/v2/missionControl/datacenters/{id}/eventBrokerServiceVersions:
+    get:
+      description: Get a listing of event broker service versions.
+      operationId: getEventBrokerServiceVersions
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventBrokerServiceVersions'
+          description: OK.
+        "400":
+          content:
+            application/json: {}
+          description: Bad request.
+        "401":
+          content:
+            application/json:
+              example:
+                message: An authentication error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized.
+        "403":
+          content:
+            application/json:
+              example:
+                message: You do not have permissions to perform this operation.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden.
+        "404":
+          content:
+            application/json: {}
+          description: Not found.
+        "500":
+          content:
+            application/json:
+              example:
+                message: An unexpected server error occurred.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Internal server error.
+        "503":
+          content:
+            application/json:
+              example:
+                message: An error occurred while communicating with an external server.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Service unavailable.
+        "504":
+          content:
+            application/json:
+              example:
+                message: The service is unavailable.
+                errorId: 618e2fb0-a198-4d9d-9219-13e51ef0ecec
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Gateway timeout.
+      security:
+      - bearerAuth: []
+      summary: (Beta) Get Event Broker Service Versions.
+      tags:
+      - Event Broker Services
+components:
+  schemas:
+    ErrorResponse:
+      discriminator:
+        propertyName: errorType
+      properties:
+        message:
+          description: A user-friendly message that describes the error.
+          example: An error occurred.
+          type: string
+        errorId:
+          description: The UUID (Universally Unique Identifier) that is logged with
+            an appropriate stack trace for a WARN or ERROR log that allows support
+            to better determine what cause the error.
+          example: 123e4567-e89b-12d3-a456-426655440000
+          type: string
+        meta:
+          additionalProperties:
+            example: "'object': { 'field': 'description' }"
+            type: object
+          example: "'object': { 'field': 'description' }"
+          type: object
+        validationDetails:
+          additionalProperties:
+            description: "When applicable, these are the details of issues with the\
+              \ fields provided for the REST call."
+            example: "'name': ['Not unique']"
+            items:
+              description: "When applicable, these are the details of issues with\
+                \ the fields provided for the REST call."
+              example: "'name': ['Not unique']"
+              type: string
+            type: array
+          description: "When applicable, these are the details of issues with the\
+            \ fields provided for the REST call."
+          example: "'name': ['Not unique']"
+          type: object
+        errorType:
+          type: string
+          writeOnly: true
+      type: object
+    ClientProfileRequest:
+      description: The client profile configured on the event broker service.
+      example:
+        apiTopicEndpointManagementCopyFromOnCreateName: apiTopicEndpointManagementCopyFromOnCreateName
+        compressionEnabled: true
+        tcpMaxWindowSize: 6
+        tcpMaxSegmentSize: 3
+        type: type
+        queueDirect2MaxDepth: 7
+        serviceSmfMinKeepaliveEnabled: true
+        id: id
+        allowSharedSubscriptionsEnabled: true
+        eventClientProvisionedEndpointSpoolUsageThreshold:
+          setPercent: 6
+          clearPercent: 6
+        queueDirect3MinMsgBurst: 5
+        queueControl1MinMsgBurst: 9
+        elidingDelay: 1
+        serviceWebMaxPayload: 1
+        serviceMinKeepaliveTimeout: 0
+        apiQueueManagementCopyFromOnCreateTemplateName: apiQueueManagementCopyFromOnCreateTemplateName
+        tlsAllowDowngradeToPlainTextEnabled: true
+        tcpKeepaliveIdleTime: 9
+        maxEndpointCountPerClientUsername: 7
+        name: name
+        queueGuaranteed1MinMsgBurst: 1
+        queueDirect2MinMsgBurst: 1
+        queueDirect1MaxDepth: 1
+        tcpCongestionWindowSize: 6
+        queueDirect3MaxDepth: 4
+        allowTransactedSessionsEnabled: true
+        allowBridgeConnectionsEnabled: true
+        serviceSmfMaxConnectionCountPerClientUsername: 5
+        allowGuaranteedMsgSendEnabled: true
+        queueDirect1MinMsgBurst: 6
+        queueGuaranteed1MaxDepth: 1
+        serviceWebInactiveTimeout: 6
+        allowGuaranteedMsgReceiveEnabled: true
+        tcpKeepaliveCount: 8
+        maxTransactionCount: 7
+        apiTopicEndpointManagementCopyFromOnCreateTemplateName: apiTopicEndpointManagementCopyFromOnCreateTemplateName
+        maxSubscriptionCount: 2
+        elidingMaxTopicCount: 2
+        queueControl1MaxDepth: 9
+        tcpKeepaliveInterval: 6
+        elidingEnabled: true
+        maxIngressFlowCount: 3
+        replicationAllowClientConnectWhenStandbyEnabled: true
+        maxEgressFlowCount: 9
+        maxTransactedSessionCount: 4
+        rejectMsgToSenderOnNoSubscriptionMatchEnabled: true
+        serviceWebMaxConnectionCountPerClientUsername: 2
+        allowGuaranteedEndpointCreateEnabled: true
+        apiQueueManagementCopyFromOnCreateName: apiQueueManagementCopyFromOnCreateName
+        maxConnectionCountPerClientUsername: 5
+      properties:
+        name:
+          maxLength: 32
+          minLength: 1
+          pattern: "[a-zA-Z0-9-_]*"
+          type: string
+        allowGuaranteedMsgSendEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to publish guaranteed messages. The valid values are 'true' (allowed)
+            or 'false' (not allowed) . The default is 'false'.
+          type: boolean
+        allowGuaranteedMsgReceiveEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to bind to topic endpoints or queues to receive guaranteed messages.
+            The valid values are 'true' (allowed) or 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        compressionEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to transfer data using compression. The valid values are 'true'
+            (allowed) and 'false' (not allowed). The default is 'true'.
+          type: boolean
+        replicationAllowClientConnectWhenStandbyEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to remain connected to the Message VPN when its replication state
+            is Standby. This situation may occur when the Message VPN Replication
+            state of the event broker service changes from Active to Standby. The
+            valid values are 'true' (allowed) and 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        allowTransactedSessionsEnabled:
+          description: Indicates whether client applications client applications assigned
+            to the client profile are allowed to establish transacted sessions or
+            XA sessions. The valid values are 'true' (allowed) and 'false' (not allowed).
+            The default is 'false'.
+          type: boolean
+        allowBridgeConnectionsEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to establish Dynamic Messaging Routing (DMR) links (or bridge
+            links) from the current Message VPN to another Message VPN in a separate
+            event broker service. The valid values are 'true' (allowed) and 'false'
+            (not allowed). The default is 'false'.
+          type: boolean
+        allowGuaranteedEndpointCreateEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to create queues or topic endpoints. The valid values are 'true'
+            (allowed) and 'false' (not allowed). The default is 'false'.
+          type: boolean
+        allowSharedSubscriptionsEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to use shared subscriptions. The valid values are 'true' (allowed)
+            and 'false' (not allowed). The default is 'false'.
+          type: boolean
+        apiQueueManagementCopyFromOnCreateName:
+          deprecated: true
+          description: "The name of a queue template to copy settings from when a\
+            \ new queue is created by the client using the client profile. If the\
+            \ specified queue template does not exist, creation fails. Deprecated\
+            \ since 2.14. This attribute has been replaced with apiQueueManagementCopyFromOnCreateTemplateName."
+          maxLength: 200
+          minLength: 0
+          type: string
+        apiQueueManagementCopyFromOnCreateTemplateName:
+          description: "The name of a queue template to copy settings from when a\
+            \ new queue is created by the client using the client profile. If the\
+            \ specified queue template does not exist, creation fails. "
+          maxLength: 255
+          minLength: 0
+          type: string
+        apiTopicEndpointManagementCopyFromOnCreateName:
+          deprecated: true
+          description: "The name of a topic endpoint to copy settings from when a\
+            \ new topic endpoint is created by the client using the client profile.\
+            \ If the specified topic endpoint does not exist, creation fails. Deprecated\
+            \ since 2.14. This attribute has been replaced with apiTopicEndpointManagementCopyFromOnCreateTemplateName."
+          maxLength: 200
+          minLength: 0
+          type: string
+        apiTopicEndpointManagementCopyFromOnCreateTemplateName:
+          description: "The name of a topic endpoint to copy settings from when a\
+            \ new topic endpoint is created by the client using the client profile.\
+            \ If the specified topic endpoint does not exist, creation fails."
+          maxLength: 255
+          minLength: 0
+          type: string
+        serviceMinKeepaliveTimeout:
+          description: "The minimum period of time (in seconds) that the event broker\
+            \ service will tolerate inactivity on the client connection. This keepalive\
+            \ value is also enforced for MQTT and SMF (Solace Message Format) connections.\
+            \ The keepalive timeout value is calculated based on the client provided\
+            \ timeout interval (3 x the keepalive interval for SMF, 1.5 x the keepalive\
+            \ interval for MQTT). The default is 30 and valid ranges are 3–3600."
+          format: int32
+          type: integer
+        serviceSmfMinKeepaliveEnabled:
+          description: Indicates whether clients using the client profile have the
+            minimum keep-alive timeout enabled for SMF (Solace Message Format) connections.
+            The valid values are 'true' (enabled) and 'false' (not enabled). The default
+            is 'false'.
+          type: boolean
+        serviceWebInactiveTimeout:
+          description: The number of seconds a Web client has to send a request before
+            its session times out and be terminated for being inactive. The default
+            value is 30 seconds.
+          format: int32
+          type: integer
+        serviceWebMaxPayload:
+          description: |-
+            The maximum transport payload size (in bytes) before fragmentation occurs for clients using the client profile. The size of the header is not included.
+
+            Solace Message Format (SMF) messages that are sent to a consuming Web client are contained within a Web transport message that the event broker sends in its HTTP response to that client. Each Web transport message that is sent can contain multiple SMF messages or partial SMF messages.
+            The maximum Web payload value sets the maximum number of bytes allowed in a single Web transport message (not including the header). This value determines the number of SMF messages that can be sent in a single HTTP response and the size of the Web transport message sent in the HTTP response. The value range is 300 to 10000000, in bytes. The default is 1000000 bytes.
+
+            SMF messages that are sent to a consuming Web client are contained within a Web transport message that the event broker sends in its HTTP response to that client. Each Web transport message that is sent can contain multiple SMF messages or partial SMF messages.
+
+            The maximum Web payload value sets the maximum number of bytes allowed in a single Web transport message (not including the header). This value determines the number of SMF messages that can be sent in a single HTTP response and the size of the Web transport message sent in the HTTP response. Note that large SMF messages can be fragmented across Web transport messages to respect the value set for the maximum possible Web payload.
+          format: int32
+          type: integer
+        maxConnectionCountPerClientUsername:
+          description: The maximum permitted number of simultaneous Web transport
+            client connections to the event broker service that can be made using
+            the same client username account. The default is the maximum value supported
+            by the platform.
+          format: int32
+          type: integer
+        serviceSmfMaxConnectionCountPerClientUsername:
+          description: The maximum permitted number of simultaneous Solace Message
+            Format (SMF) client connections to the event broker that can be made using
+            the same client username account. The default is the maximum value supported
+            by the platform.
+          format: int32
+          type: integer
+        serviceWebMaxConnectionCountPerClientUsername:
+          description: The maximum permitted number of simultaneous Web transport
+            client connections to the event broker service that can be made using
+            the same client username account. The default is the maximum value supported
+            by the platform.
+          format: int32
+          type: integer
+        maxEndpointCountPerClientUsername:
+          description: The maximum number of durable and non-durable queues and topic
+            endpoints that can be owned by the clients using the same client username
+            within a client profile. The default is 1000.
+          format: int32
+          type: integer
+        maxEgressFlowCount:
+          description: "The maximum number of egress flows (that is, Guaranteed Message\
+            \ client receive flows or consumer flows) that can be created by a single\
+            \ client associated with this client profile. The default is 1000."
+          format: int32
+          type: integer
+        maxIngressFlowCount:
+          description: "The maximum number of ingress flows (that is, Guaranteed Message\
+            \ client publish flows) that can be created by a single client associated\
+            \ with this client profile. The default is 1000."
+          format: int32
+          type: integer
+        maxSubscriptionCount:
+          description: "The maximum number of subscriptions for a single client in\
+            \ the client profile. When you set this option, consider the total maximum\
+            \ number of permitted topic subscriptions and the total maximum number\
+            \ of client connections for the type of event broker that is used. That\
+            \ is, to ensure reliable system performance, you must find the right balance\
+            \ for your network, while staying within the system limits mentioned.\
+            \ The balance is generally between allowing the creation of many client\
+            \ applications and allowing each client to add a large number of topic\
+            \ subscriptions. The default varies by platform."
+          format: int32
+          type: integer
+        maxTransactedSessionCount:
+          description: The maximum number of simultaneous transacted sessions and/or
+            XA sessions allowed for a single client associated with the client profile.
+            The default is 10.
+          format: int32
+          type: integer
+        maxTransactionCount:
+          description: The total maximum number of simultaneous transactions (both
+            local transactions and transactions within the XA transaction branches)
+            allowed for a single client associated with the client profile. The default
+            varies by platform.
+          format: int32
+          type: integer
+        queueGuaranteed1MaxDepth:
+          description: The egress queue maximum depth for Guaranteed Messages that
+            represents the number of work units for the client priority queues. The
+            valid range is 2 to 262144. The default is 20000.
+          format: int32
+          type: integer
+        queueGuaranteed1MinMsgBurst:
+          description: "The minimum number of messages that must be on the Guaranteed\
+            \ Message queue before the queue’s depth is checked against the maximum\
+            \ depth setting (thereby allowing the queue to absorb a burst of large\
+            \ messages that exceeds the number of allowed work units). A valid range\
+            \ is 0 to 262144 with the default of 255. The value of 255 is recommended\
+            \ for memory usage optimized configurations, such as message applications;\
+            \ a value of 66000 is for WAN optimized configurations."
+          format: int32
+          type: integer
+        queueDirect1MaxDepth:
+          description: "The egress queue maximum depth for Direct Messages 1 [Class\
+            \ of Service (COS) 1] that represents the number of work units for the\
+            \ client priority queues. The valid range is 2 to 262144. The default\
+            \ is 20000."
+          format: int32
+          type: integer
+        queueDirect1MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 1
+            (COS 1) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        queueDirect2MaxDepth:
+          description: The egress queue maximum depth for Direct Messages 2 (COS 2)
+            that represents the number of work units for the client priority queues.
+            The valid range is 2 to 262144. The default is 20000.
+          format: int32
+          type: integer
+        queueDirect2MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 2
+            (COS 2) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        queueDirect3MaxDepth:
+          description: "The egress queue maximum depth for Direct Messages 3 [Class\
+            \ of Service (COS) 3] that represents the number of work units for the\
+            \ client priority queues. The valid range is 2 to 262144. The default\
+            \ is 20000."
+          format: int32
+          type: integer
+        queueDirect3MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 3
+            (COS 3) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        queueControl1MaxDepth:
+          description: The egress queue maximum depth for Control 1 that represents
+            the number of work units for the client priority queues. The valid range
+            is 2 to 262144. The default is 20000.
+          format: int32
+          type: integer
+        queueControl1MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 1
+            (COS 1) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        tcpCongestionWindowSize:
+          description: |-
+            The TCP initial congestion window size is the number of segments that TCP sends before waiting for an acknowledgment from the peer. The TCP initial congestion window size is used when starting up a TCP connection or on recovery from idle (that is, no traffic). Larger values of the initial window allows a connection to come up to speed more quickly. For further details, refer to RFC 2581.
+            Changing the TCP initial congestion window size from its default of 2 results in non-compliance with RFC 2581. Further, if this setting is set to a value too high, it may cause congestion in the network. Contact support before you attempt to change this TCP parameter.
+          format: int32
+          type: integer
+        tcpKeepaliveCount:
+          description: The maximum number of keepalive probes (from 2 to 5 ) that
+            TCP should send before dropping the connection. The default is 5.
+          format: int32
+          type: integer
+        tcpKeepaliveIdleTime:
+          description: The time (from 3 to 120 seconds) a connection must remain idle
+            before TCP begins sending keepalive probes. The default is 3.
+          format: int32
+          type: integer
+        tcpKeepaliveInterval:
+          description: The time (from 1 to 30 seconds) to set as the interval between
+            individual keepalive probes. The default is 1.
+          format: int32
+          type: integer
+        tcpMaxSegmentSize:
+          description: The TCP maximum segment size (MSS) used for client to the event
+            broker service. The default is 1460.
+          format: int32
+          type: integer
+        tcpMaxWindowSize:
+          description: |-
+            The TCP window size between the event broker service and the client.
+            If the maximum window size is set to less than the bandwidth-delay product, then the TCP connection operates below its maximum potential throughput. If the maximum window is set to less than about twice the bandwidth-delay product, then occasional packet loss causes the TCP connection to operate below its maximum potential throughput as it handles the missing acknowledgments and retransmissions. The default is 256.
+
+            Alternately, if the TCP maximum window size is set too large, in the presence of a high offered load, TCP gradually increases its congestion window size until either the congestion window size reaches the maximum window size, or packet loss occurs in the network.
+
+            Initially, when the TCP congestion window size is small, the physical bandwidth-delay of the network acts as a memory buffer for packets in flight. But as the congestion window crosses the bandwidth-delay product, the buffering of in-flight packets moves to queues in event broker services and other equipment throughout the network. As the TCP congestion window continues to increase in size, these various equipment queues overflow, causing packet loss and TCP backoff.
+          format: int32
+          type: integer
+        elidingDelay:
+          description: The amount of time to delay the delivery of messages to a client
+            after the initial message has been delivered. You can specify a value
+            from 0-6000 milliseconds. The default is 0.
+          format: int32
+          type: integer
+        elidingEnabled:
+          description: "Indicates whether clients assigned to the client profile are\
+            \ allowed to use eliding. Eliding allows clients to define a custom per-topic\
+            \ rate for client applications so they can effectively consume relevant\
+            \ messages, rather than queuing up outdated messages. For example, when\
+            \ eliding is configured, clients could receive direct messages for their\
+            \ topic subscriptions at a rate of at most five per second, per topic–\
+            even though the source is publishing updates at a much higher rate. The\
+            \ valid values are 'true' (enabled) and 'false' (not enabled). The default\
+            \ is 'false'."
+          type: boolean
+        elidingMaxTopicCount:
+          description: The maximum number of topics the event broker service that
+            can track for performing the eliding function on each client connection.
+            You can specify a value from 1-320000. The default is 256.
+          format: int32
+          type: integer
+        rejectMsgToSenderOnNoSubscriptionMatchEnabled:
+          description: Indicates whether clients assigned the client profile are allowed
+            to return NACKs (negative acknowledgements) for guaranteed messages that
+            do not have a that do not have a matching guaranteed message subscription.
+            The value values are 'true' (allowed) and 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        tlsAllowDowngradeToPlainTextEnabled:
+          description: "Indicates whether clients assigned the client profile are\
+            \ allowed to use TLS/SSL encryption to protect the clients' credentials.\
+            \ This setting doesn't encrypt the data that is transmitted after the\
+            \ clients are authenticated and authorized. This also allows connecting\
+            \ client applications to request to downgrade of their TLS/SSL connections\
+            \ to the Message VPN to a plain-text connection, and if that Message VPN\
+            \ allows TLS/SSL connection downgrades, after the clientsʼ login handshake\
+            \ are finished, their connections are downgraded. This means that the\
+            \ clientsʼ authentication data is still encrypted, but the subsequent\
+            \ application data that is transmitted is sent as non-encrypted plain-text.\
+            \ The valid values are 'true (allowed) or 'false (not allowed). The default\
+            \ is 'true'."
+          type: boolean
+        eventClientProvisionedEndpointSpoolUsageThreshold:
+          $ref: '#/components/schemas/ProvisionedEndpointSpoolUsageAlertThresholds'
+        id:
+          type: string
+        type:
+          type: string
+      type: object
+    ProvisionedEndpointSpoolUsageAlertThresholds:
+      description: The clear ('clearPercent') and raise ('setPercent') threshold values
+        that determine when to generate events for the percentage amount of the message
+        spool used by all endpoints provisioned by clients for the given client profile.
+      example:
+        setPercent: 6
+        clearPercent: 6
+      properties:
+        setPercent:
+          description: The clear threshold value for the message spool usage (as a
+            percentage).
+          format: int32
+          type: integer
+        clearPercent:
+          description: The raise threshold value for the message spool usage (as a
+            percentage).
+          format: int32
+          type: integer
+      type: object
+    Error:
+      example:
+        errorId: errorId
+        message: message
+      properties:
+        message:
+          description: A user-friendly message describing the reason for the error
+            or what went wrong.
+          type: string
+        errorId:
+          description: A universally unique identifier (UUID) is useful for debugging.
+            You can provide this code as part of the information you send to our support
+            team.
+          type: string
+      type: object
+    Operation:
+      example:
+        resourceId: abcd1234
+        createdBy: createdBy
+        completedTime: 2022-03-14T15:01:34.000Z
+        createdTime: 2022-03-14T15:01:34.000Z
+        operationType: createService
+        id: id
+        type: operation
+        error:
+          errorId: errorId
+          message: message
+        resourceType: service
+        status: pending
+      properties:
+        id:
+          description: The unique identifier for the operation.
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          example: operation
+          readOnly: true
+          type: string
+        operationType:
+          description: "The type of operation against the resource, such as 'createService',\
+            \ 'cloneService', 'deleteService', 'createClientProfile', 'updateClientProfile',\
+            \ and 'deleteClientProfile'."
+          enum:
+          - createService
+          - cloneService
+          - deleteService
+          - createClientProfile
+          - updateClientProfile
+          - deleteClientProfile
+          - serviceRequest
+          - infrastructureRequest
+          type: string
+        createdBy:
+          description: The unique identifier representing the user who created the
+            operation.
+          type: string
+        createdTime:
+          description: "The time the operation was created, in ISO 8601 date/time\
+            \ format."
+          example: 2022-03-14T15:01:34.000Z
+          type: string
+        completedTime:
+          description: "The completion time, whether it was successful or failed,\
+            \ in ISO 8601 date/time format."
+          example: 2022-03-14T15:01:34.000Z
+          type: string
+        resourceId:
+          description: The resource ID that the operation belongs to.
+          example: abcd1234
+          readOnly: true
+          type: string
+        resourceType:
+          description: The resource type that the operation belongs to.
+          example: service
+          readOnly: true
+          type: string
+        status:
+          description: The status of the operation.
+          enum:
+          - pending
+          - inProgress
+          - completed
+          - failed
+          example: pending
+          readOnly: true
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      type: object
+    OperationResponse:
+      example:
+        data:
+          resourceId: abcd1234
+          createdBy: createdBy
+          completedTime: 2022-03-14T15:01:34.000Z
+          createdTime: 2022-03-14T15:01:34.000Z
+          operationType: createService
+          id: id
+          type: operation
+          error:
+            errorId: errorId
+            message: message
+          resourceType: service
+          status: pending
+        meta:
+          key: "{}"
+      properties:
+        data:
+          $ref: '#/components/schemas/Operation'
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    ConnectionEndpoint:
+      description: The connection endpoint.
+      example:
+        accessType: accessType
+        hostNames:
+        - hostNames
+        - hostNames
+        name: Public Endpoint
+        description: description
+        k8sServiceType: k8sServiceType
+        id: id
+        type: type
+        ports:
+          key: 0
+        k8sServiceId: k8sServiceId
+      properties:
+        id:
+          description: The identifier of the connection endpoint.
+          readOnly: true
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          readOnly: true
+          type: string
+        name:
+          description: The name of the connection endpoint.
+          example: Public Endpoint
+          type: string
+        description:
+          description: The description for the connection endpoint.
+          type: string
+        accessType:
+          description: The connectivity for the connection endpoint. This can be through
+            private IP addresses (Private) or public Internet (Public).
+          pattern: ^Public$|^Private$
+          type: string
+        k8sServiceType:
+          description: The connectivity configuration that is used in the Kubernetes
+            cluster.
+          pattern: ^NodePort$|^LoadBalancer$|^ClusterIP$
+          readOnly: true
+          type: string
+        k8sServiceId:
+          description: The identifier for the Kubernetes service.
+          readOnly: true
+          type: string
+        hostNames:
+          description: The hostnames assigned to the connection endpoint.
+          items:
+            description: The hostnames assigned to the connection endpoint.
+            readOnly: true
+            type: string
+          readOnly: true
+          type: array
+        ports:
+          additionalProperties:
+            description: The names and port numbers for the connection endpoint.
+            format: int32
+            type: integer
+          description: The names and port numbers for the connection endpoint.
+          type: object
+      type: object
+    CreateServiceRequest:
+      example:
+        maxSpoolUsage: 50
+        eventBrokerVersion: 10.0.1.62-0
+        redundancyGroupSslEnabled: true
+        clusterName: MyCluster
+        name: my-service-name
+        datacenterId: k8s-us-east-1
+        serviceConnectionEndpoints:
+        - accessType: accessType
+          hostNames:
+          - hostNames
+          - hostNames
+          name: Public Endpoint
+          description: description
+          k8sServiceType: k8sServiceType
+          id: id
+          type: type
+          ports:
+            key: 0
+          k8sServiceId: k8sServiceId
+        - accessType: accessType
+          hostNames:
+          - hostNames
+          - hostNames
+          name: Public Endpoint
+          description: description
+          k8sServiceType: k8sServiceType
+          id: id
+          type: type
+          ports:
+            key: 0
+          k8sServiceId: k8sServiceId
+        msgVpnName: MyVPN
+        locked: true
+        serviceClassId: DEVELOPER
+      properties:
+        name:
+          description: The event broker service name.
+          example: my-service-name
+          type: string
+        eventBrokerVersion:
+          description: The event broker version. A default version is provided when
+            this is not specified.
+          example: 10.0.1.62-0
+          pattern: "^([0-9]+)\\.([0-9]+)(\\.([0-9]+)\\.([0-9]+)-([0-9]+))?$"
+          type: string
+        msgVpnName:
+          description: The message VPN name. A default message VPN name is provided
+            when this is not specified.
+          example: MyVPN
+          type: string
+        maxSpoolUsage:
+          description: "The message spool size, in gigabytes (GB). A default message\
+            \ spool size is provided if this is not specified."
+          example: 50
+          format: int32
+          maximum: 6000
+          minimum: 10
+          type: integer
+        serviceClassId:
+          description: The identifier of the service class.
+          enum:
+          - DEVELOPER
+          - ENTERPRISE_250_STANDALONE
+          - ENTERPRISE_1K_STANDALONE
+          - ENTERPRISE_5K_STANDALONE
+          - ENTERPRISE_10K_STANDALONE
+          - ENTERPRISE_50K_STANDALONE
+          - ENTERPRISE_100K_STANDALONE
+          - ENTERPRISE_250_HIGHAVAILABILITY
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_5K_HIGHAVAILABILITY
+          - ENTERPRISE_10K_HIGHAVAILABILITY
+          - ENTERPRISE_50K_HIGHAVAILABILITY
+          - ENTERPRISE_100K_HIGHAVAILABILITY
+          example: DEVELOPER
+          type: string
+        datacenterId:
+          description: The identifier of the datacenter.
+          example: k8s-us-east-1
+          type: string
+        clusterName:
+          description: The name of the DMR cluster.
+          example: MyCluster
+          type: string
+        locked:
+          default: false
+          description: Lock service after creation. A locked service cannot be deleted.
+          example: true
+          type: boolean
+        redundancyGroupSslEnabled:
+          default: false
+          description: Whether redundancy group SSL is enabled. This is mate-link
+            encryption.
+          example: true
+          type: boolean
+        serviceConnectionEndpoints:
+          description: The collection of service connection endpoints.
+          items:
+            $ref: '#/components/schemas/ConnectionEndpoint'
+          type: array
+      required:
+      - datacenterId
+      - name
+      - serviceClassId
+      type: object
+    UpdateServiceRequest:
+      example:
+        name: My-First-Service
+        locked: true
+        ownedBy: xjllt9rg
+      properties:
+        name:
+          description: The new service name. The new service name must be unique within
+            an organization.
+          example: My-First-Service
+          maxLength: 50
+          type: string
+        ownedBy:
+          description: The owner of the event broker service. The owner must belong
+            to the same organization.
+          example: xjllt9rg
+          type: string
+        locked:
+          description: Lock (true) and unlock (false) the event broker service. If
+            an event broker service is locked it's protected from being deleted.
+          example: true
+          type: boolean
+      type: object
+    Broker:
+      description: Broker Details available on expand only.
+      example:
+        cluster:
+          monitoringRouterName: monitoringRouterName
+          password: password
+          backupRouterName: backupRouterName
+          supportedAuthenticationMode:
+          - supportedAuthenticationMode
+          - supportedAuthenticationMode
+          primaryRouterName: primaryRouterName
+          name: name
+          remoteAddress: remoteAddress
+        managementReadOnlyLoginCredential:
+          password: password
+          username: username
+          token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+        maxSpoolUsage: 0
+        redundancyGroupSslEnabled: true
+        monitoringMode: monitoringMode
+        version: 10.1.1.29
+        servicePackageId: servicePackageId
+        domainCertificateAuthorities:
+        - name: name
+        - name: name
+        diskSize: 6
+        configSyncSslEnabled: true
+        clientCertificateAuthorities:
+        - name: name
+        - name: name
+        versionFamily: versionFamily
+        ldapProfiles:
+        - name: name
+        - name: name
+        msgVpns:
+        - clientProfiles:
+          - name: name
+          - name: name
+          eventLargeMsgThreshold: 1
+          maxIngressFlowCount: 7
+          authenticationClientCertValidateDateEnabled: true
+          maxEgressFlowCount: 5
+          maxTransactedSessionCount: 2
+          maxEndpointCount: 2
+          subDomainName: subDomainName
+          enabled: true
+          maxConnectionCount: 5
+          maxTransactionCount: 4
+          sempOverMessageBus:
+            sempAccessToAdminCmdsEnabled: true
+            sempOverMsgBusEnabled: true
+            sempAccessToShowCmdsEnabled: true
+            sempAccessToClientAdminCmdsEnabled: true
+            sempAccessToCacheCmdsEnabled: true
+          authenticationClientCertEnabled: true
+          maxSubscriptionCount: 3
+          truststoreUri: truststoreUri
+          msgVpnName: msgVpnName
+          authenticationBasicEnabled: true
+          maxMsgSpoolUsage: 9
+          authenticationOauthEnabled: true
+          serviceLoginCredential:
+            password: password
+            username: username
+          authenticationBasicType: authenticationBasicType
+          managementAdminLoginCredential:
+            password: password
+            username: username
+            token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+        - clientProfiles:
+          - name: name
+          - name: name
+          eventLargeMsgThreshold: 1
+          maxIngressFlowCount: 7
+          authenticationClientCertValidateDateEnabled: true
+          maxEgressFlowCount: 5
+          maxTransactedSessionCount: 2
+          maxEndpointCount: 2
+          subDomainName: subDomainName
+          enabled: true
+          maxConnectionCount: 5
+          maxTransactionCount: 4
+          sempOverMessageBus:
+            sempAccessToAdminCmdsEnabled: true
+            sempOverMsgBusEnabled: true
+            sempAccessToShowCmdsEnabled: true
+            sempAccessToClientAdminCmdsEnabled: true
+            sempAccessToCacheCmdsEnabled: true
+          authenticationClientCertEnabled: true
+          maxSubscriptionCount: 3
+          truststoreUri: truststoreUri
+          msgVpnName: msgVpnName
+          authenticationBasicEnabled: true
+          maxMsgSpoolUsage: 9
+          authenticationOauthEnabled: true
+          serviceLoginCredential:
+            password: password
+            username: username
+          authenticationBasicType: authenticationBasicType
+          managementAdminLoginCredential:
+            password: password
+            username: username
+            token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+        tlsStandardDomainCertificateAuthoritiesEnabled: true
+      properties:
+        version:
+          description: The version number for the event broker service.
+          example: 10.1.1.29
+          type: string
+        versionFamily:
+          description: "Version Family, a truncated form of the version."
+          type: string
+        servicePackageId:
+          description: The service package identifier of the event broker version.
+          type: string
+        maxSpoolUsage:
+          description: "The maximum message spool usage allowed on the event broker\
+            \ service, in gigabytes (GB)."
+          format: int32
+          type: integer
+        diskSize:
+          description: "The disk size for the message spool, in gigabytes (GB)."
+          format: int32
+          type: integer
+        redundancyGroupSslEnabled:
+          description: Whether redundancy group SSL is enabled. This is mate-link
+            encryption.
+          type: boolean
+        configSyncSslEnabled:
+          description: Whether Config-Sync SSL is enabled.
+          type: boolean
+        monitoringMode:
+          description: The monitoring mode. This can be 'basic' or 'advanced'. The
+            value of basic is default monitoring and advanced means that monitoring
+            of the event broker is enabled.
+          type: string
+        clientCertificateAuthorities:
+          description: The list of client certificate authorities.
+          items:
+            $ref: '#/components/schemas/CertificateAuthority'
+          type: array
+        domainCertificateAuthorities:
+          description: The list of domain certificate authorities.
+          items:
+            $ref: '#/components/schemas/CertificateAuthority'
+          type: array
+        tlsStandardDomainCertificateAuthoritiesEnabled:
+          description: Whether TLS Standard Domain Certificate Authorities is enabled.
+          type: boolean
+        ldapProfiles:
+          description: The LDAP profiles configured for the event broker service.
+          items:
+            $ref: '#/components/schemas/LdapProfile'
+          type: array
+        cluster:
+          $ref: '#/components/schemas/Cluster'
+        managementReadOnlyLoginCredential:
+          $ref: '#/components/schemas/ManagementLoginCredential'
+        msgVpns:
+          description: The list of Message VPNs configured on the event broker service.
+          items:
+            $ref: '#/components/schemas/MsgVpn'
+          type: array
+      type: object
+    CertificateAuthority:
+      description: The certificate authority.
+      example:
+        name: name
+      properties:
+        name:
+          description: Name
+          type: string
+      type: object
+    ClientProfileBase:
+      description: The client profile configured on the event broker service.
+      example:
+        name: name
+      properties:
+        name:
+          description: The name of the client profile.
+          maxLength: 32
+          minLength: 1
+          pattern: "[a-zA-Z0-9-_]*"
+          type: string
+      required:
+      - name
+      type: object
+    Cluster:
+      description: The DMR cluster details.
+      example:
+        monitoringRouterName: monitoringRouterName
+        password: password
+        backupRouterName: backupRouterName
+        supportedAuthenticationMode:
+        - supportedAuthenticationMode
+        - supportedAuthenticationMode
+        primaryRouterName: primaryRouterName
+        name: name
+        remoteAddress: remoteAddress
+      properties:
+        name:
+          description: The name of the DMR cluster.
+          type: string
+        password:
+          description: The password for the cluster.
+          format: password
+          type: string
+        remoteAddress:
+          description: The address of the remote node in the cluster.
+          type: string
+        primaryRouterName:
+          description: The name of the primary event broker.
+          type: string
+        backupRouterName:
+          description: The name of the backup event broker.
+          type: string
+        monitoringRouterName:
+          description: The name of the monitoring node.
+          type: string
+        supportedAuthenticationMode:
+          description: The authentication mode between the nodes in the DMR cluster.
+          items:
+            description: The authentication mode between the nodes in the DMR cluster.
+            type: string
+          type: array
+      type: object
+    GetService:
+      example:
+        updatedTime: 2022-03-14T15:01:34Z
+        updatedBy: updatedBy
+        defaultManagementHostname: defaultManagementHostname
+        datacenterId: datacenterId
+        type: type
+        broker:
+          cluster:
+            monitoringRouterName: monitoringRouterName
+            password: password
+            backupRouterName: backupRouterName
+            supportedAuthenticationMode:
+            - supportedAuthenticationMode
+            - supportedAuthenticationMode
+            primaryRouterName: primaryRouterName
+            name: name
+            remoteAddress: remoteAddress
+          managementReadOnlyLoginCredential:
+            password: password
+            username: username
+            token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+          maxSpoolUsage: 0
+          redundancyGroupSslEnabled: true
+          monitoringMode: monitoringMode
+          version: 10.1.1.29
+          servicePackageId: servicePackageId
+          domainCertificateAuthorities:
+          - name: name
+          - name: name
+          diskSize: 6
+          configSyncSslEnabled: true
+          clientCertificateAuthorities:
+          - name: name
+          - name: name
+          versionFamily: versionFamily
+          ldapProfiles:
+          - name: name
+          - name: name
+          msgVpns:
+          - clientProfiles:
+            - name: name
+            - name: name
+            eventLargeMsgThreshold: 1
+            maxIngressFlowCount: 7
+            authenticationClientCertValidateDateEnabled: true
+            maxEgressFlowCount: 5
+            maxTransactedSessionCount: 2
+            maxEndpointCount: 2
+            subDomainName: subDomainName
+            enabled: true
+            maxConnectionCount: 5
+            maxTransactionCount: 4
+            sempOverMessageBus:
+              sempAccessToAdminCmdsEnabled: true
+              sempOverMsgBusEnabled: true
+              sempAccessToShowCmdsEnabled: true
+              sempAccessToClientAdminCmdsEnabled: true
+              sempAccessToCacheCmdsEnabled: true
+            authenticationClientCertEnabled: true
+            maxSubscriptionCount: 3
+            truststoreUri: truststoreUri
+            msgVpnName: msgVpnName
+            authenticationBasicEnabled: true
+            maxMsgSpoolUsage: 9
+            authenticationOauthEnabled: true
+            serviceLoginCredential:
+              password: password
+              username: username
+            authenticationBasicType: authenticationBasicType
+            managementAdminLoginCredential:
+              password: password
+              username: username
+              token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+          - clientProfiles:
+            - name: name
+            - name: name
+            eventLargeMsgThreshold: 1
+            maxIngressFlowCount: 7
+            authenticationClientCertValidateDateEnabled: true
+            maxEgressFlowCount: 5
+            maxTransactedSessionCount: 2
+            maxEndpointCount: 2
+            subDomainName: subDomainName
+            enabled: true
+            maxConnectionCount: 5
+            maxTransactionCount: 4
+            sempOverMessageBus:
+              sempAccessToAdminCmdsEnabled: true
+              sempOverMsgBusEnabled: true
+              sempAccessToShowCmdsEnabled: true
+              sempAccessToClientAdminCmdsEnabled: true
+              sempAccessToCacheCmdsEnabled: true
+            authenticationClientCertEnabled: true
+            maxSubscriptionCount: 3
+            truststoreUri: truststoreUri
+            msgVpnName: msgVpnName
+            authenticationBasicEnabled: true
+            maxMsgSpoolUsage: 9
+            authenticationOauthEnabled: true
+            serviceLoginCredential:
+              password: password
+              username: username
+            authenticationBasicType: authenticationBasicType
+            managementAdminLoginCredential:
+              password: password
+              username: username
+              token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+          tlsStandardDomainCertificateAuthoritiesEnabled: true
+        eventMeshId: eventMeshId
+        creationState: creationState
+        ongoingOperationIds:
+        - ongoingOperationIds
+        - ongoingOperationIds
+        infrastructureId: infrastructureId
+        createdBy: createdBy
+        name: name
+        adminState: adminState
+        createdTime: 2022-03-14T15:01:34Z
+        serviceConnectionEndpoints:
+        - accessType: accessType
+          hostNames:
+          - hostNames
+          - hostNames
+          name: Public Endpoint
+          description: description
+          k8sServiceType: k8sServiceType
+          id: id
+          type: type
+          ports:
+            key: 0
+          k8sServiceId: k8sServiceId
+        - accessType: accessType
+          hostNames:
+          - hostNames
+          - hostNames
+          name: Public Endpoint
+          description: description
+          k8sServiceType: k8sServiceType
+          id: id
+          type: type
+          ports:
+            key: 0
+          k8sServiceId: k8sServiceId
+        id: id
+        locked: true
+        ownedBy: ownedBy
+        serviceClassId: DEVELOPER
+      properties:
+        id:
+          description: The identifier of the event broker service.
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          type: string
+        name:
+          description: The name of the event broker service.
+          type: string
+        createdBy:
+          description: The unique identifier representing the user who created the
+            event broker service.
+          type: string
+        createdTime:
+          description: "The time the event broker service was created, in ISO 8601\
+            \ date/time format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        updatedBy:
+          description: The unique identifier representing the user who last updated
+            the event broker service.
+          type: string
+        updatedTime:
+          description: "The time of the last update was performed on the event broker\
+            \ service, in ISO 8601 date/time format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        ownedBy:
+          description: The unique identifier representing the user who owns the event
+            broker service.
+          type: string
+        infrastructureId:
+          description: A unique identifier representing for the infrastructure of
+            the event broker service.
+          type: string
+        datacenterId:
+          description: The identifier of the datacenter.
+          type: string
+        serviceClassId:
+          description: The service class of the event broker service.
+          enum:
+          - DEVELOPER
+          - ENTERPRISE_250_STANDALONE
+          - ENTERPRISE_1K_STANDALONE
+          - ENTERPRISE_5K_STANDALONE
+          - ENTERPRISE_10K_STANDALONE
+          - ENTERPRISE_50K_STANDALONE
+          - ENTERPRISE_100K_STANDALONE
+          - ENTERPRISE_250_HIGHAVAILABILITY
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_5K_HIGHAVAILABILITY
+          - ENTERPRISE_10K_HIGHAVAILABILITY
+          - ENTERPRISE_50K_HIGHAVAILABILITY
+          - ENTERPRISE_100K_HIGHAVAILABILITY
+          type: string
+        eventMeshId:
+          description: "The identifier of the event mesh for which the event broker\
+            \ service belongs, if applicable."
+          type: string
+        ongoingOperationIds:
+          description: The operation identifiers for an ongoing operation on the event
+            broker service.
+          items:
+            type: string
+          type: array
+        adminState:
+          description: "The administration state of the event broker service, which\
+            \ can be 'initial', 'start', 'stop' , or 'destroy'."
+          type: string
+        creationState:
+          description: "The creation state of the event broker service, one of 'pending',\
+            \ 'inProgress' , ' completed' , or 'failed'."
+          type: string
+        locked:
+          description: Whether the event broker service is locked. Locked event broker
+            services cannot be deleted.
+          type: boolean
+        defaultManagementHostname:
+          description: Default management hostname.
+          type: string
+        serviceConnectionEndpoints:
+          description: Connection Endpoints available on expand only.
+          items:
+            $ref: '#/components/schemas/ConnectionEndpoint'
+          type: array
+        broker:
+          $ref: '#/components/schemas/Broker'
+      type: object
+    GetServiceResponse:
+      example:
+        data:
+          updatedTime: 2022-03-14T15:01:34Z
+          updatedBy: updatedBy
+          defaultManagementHostname: defaultManagementHostname
+          datacenterId: datacenterId
+          type: type
+          broker:
+            cluster:
+              monitoringRouterName: monitoringRouterName
+              password: password
+              backupRouterName: backupRouterName
+              supportedAuthenticationMode:
+              - supportedAuthenticationMode
+              - supportedAuthenticationMode
+              primaryRouterName: primaryRouterName
+              name: name
+              remoteAddress: remoteAddress
+            managementReadOnlyLoginCredential:
+              password: password
+              username: username
+              token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+            maxSpoolUsage: 0
+            redundancyGroupSslEnabled: true
+            monitoringMode: monitoringMode
+            version: 10.1.1.29
+            servicePackageId: servicePackageId
+            domainCertificateAuthorities:
+            - name: name
+            - name: name
+            diskSize: 6
+            configSyncSslEnabled: true
+            clientCertificateAuthorities:
+            - name: name
+            - name: name
+            versionFamily: versionFamily
+            ldapProfiles:
+            - name: name
+            - name: name
+            msgVpns:
+            - clientProfiles:
+              - name: name
+              - name: name
+              eventLargeMsgThreshold: 1
+              maxIngressFlowCount: 7
+              authenticationClientCertValidateDateEnabled: true
+              maxEgressFlowCount: 5
+              maxTransactedSessionCount: 2
+              maxEndpointCount: 2
+              subDomainName: subDomainName
+              enabled: true
+              maxConnectionCount: 5
+              maxTransactionCount: 4
+              sempOverMessageBus:
+                sempAccessToAdminCmdsEnabled: true
+                sempOverMsgBusEnabled: true
+                sempAccessToShowCmdsEnabled: true
+                sempAccessToClientAdminCmdsEnabled: true
+                sempAccessToCacheCmdsEnabled: true
+              authenticationClientCertEnabled: true
+              maxSubscriptionCount: 3
+              truststoreUri: truststoreUri
+              msgVpnName: msgVpnName
+              authenticationBasicEnabled: true
+              maxMsgSpoolUsage: 9
+              authenticationOauthEnabled: true
+              serviceLoginCredential:
+                password: password
+                username: username
+              authenticationBasicType: authenticationBasicType
+              managementAdminLoginCredential:
+                password: password
+                username: username
+                token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+            - clientProfiles:
+              - name: name
+              - name: name
+              eventLargeMsgThreshold: 1
+              maxIngressFlowCount: 7
+              authenticationClientCertValidateDateEnabled: true
+              maxEgressFlowCount: 5
+              maxTransactedSessionCount: 2
+              maxEndpointCount: 2
+              subDomainName: subDomainName
+              enabled: true
+              maxConnectionCount: 5
+              maxTransactionCount: 4
+              sempOverMessageBus:
+                sempAccessToAdminCmdsEnabled: true
+                sempOverMsgBusEnabled: true
+                sempAccessToShowCmdsEnabled: true
+                sempAccessToClientAdminCmdsEnabled: true
+                sempAccessToCacheCmdsEnabled: true
+              authenticationClientCertEnabled: true
+              maxSubscriptionCount: 3
+              truststoreUri: truststoreUri
+              msgVpnName: msgVpnName
+              authenticationBasicEnabled: true
+              maxMsgSpoolUsage: 9
+              authenticationOauthEnabled: true
+              serviceLoginCredential:
+                password: password
+                username: username
+              authenticationBasicType: authenticationBasicType
+              managementAdminLoginCredential:
+                password: password
+                username: username
+                token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+            tlsStandardDomainCertificateAuthoritiesEnabled: true
+          eventMeshId: eventMeshId
+          creationState: creationState
+          ongoingOperationIds:
+          - ongoingOperationIds
+          - ongoingOperationIds
+          infrastructureId: infrastructureId
+          createdBy: createdBy
+          name: name
+          adminState: adminState
+          createdTime: 2022-03-14T15:01:34Z
+          serviceConnectionEndpoints:
+          - accessType: accessType
+            hostNames:
+            - hostNames
+            - hostNames
+            name: Public Endpoint
+            description: description
+            k8sServiceType: k8sServiceType
+            id: id
+            type: type
+            ports:
+              key: 0
+            k8sServiceId: k8sServiceId
+          - accessType: accessType
+            hostNames:
+            - hostNames
+            - hostNames
+            name: Public Endpoint
+            description: description
+            k8sServiceType: k8sServiceType
+            id: id
+            type: type
+            ports:
+              key: 0
+            k8sServiceId: k8sServiceId
+          id: id
+          locked: true
+          ownedBy: ownedBy
+          serviceClassId: DEVELOPER
+        meta:
+          key: "{}"
+      properties:
+        data:
+          $ref: '#/components/schemas/GetService'
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    LdapProfile:
+      description: The LDAP profiles configured for the event broker service.
+      example:
+        name: name
+      properties:
+        name:
+          description: The name of the LDAP profile.
+          type: string
+      type: object
+    LoginCredential:
+      description: The login credentials for the event broker service.
+      example:
+        password: password
+        username: username
+      properties:
+        username:
+          description: The username to log into the event broker service.
+          type: string
+        password:
+          description: The password to log into the event broker service.
+          format: password
+          type: string
+      type: object
+    ManagementLoginCredential:
+      description: The management admin login credentials
+      example:
+        password: password
+        username: username
+        token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+      properties:
+        username:
+          description: The username to log into the event broker service.
+          type: string
+        password:
+          description: The password to log into the event broker service.
+          format: password
+          type: string
+        token:
+          description: The token for management access.
+          example: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+          type: string
+      type: object
+    MsgVpn:
+      description: The list of Message VPNs configured on the event broker service.
+      example:
+        clientProfiles:
+        - name: name
+        - name: name
+        eventLargeMsgThreshold: 1
+        maxIngressFlowCount: 7
+        authenticationClientCertValidateDateEnabled: true
+        maxEgressFlowCount: 5
+        maxTransactedSessionCount: 2
+        maxEndpointCount: 2
+        subDomainName: subDomainName
+        enabled: true
+        maxConnectionCount: 5
+        maxTransactionCount: 4
+        sempOverMessageBus:
+          sempAccessToAdminCmdsEnabled: true
+          sempOverMsgBusEnabled: true
+          sempAccessToShowCmdsEnabled: true
+          sempAccessToClientAdminCmdsEnabled: true
+          sempAccessToCacheCmdsEnabled: true
+        authenticationClientCertEnabled: true
+        maxSubscriptionCount: 3
+        truststoreUri: truststoreUri
+        msgVpnName: msgVpnName
+        authenticationBasicEnabled: true
+        maxMsgSpoolUsage: 9
+        authenticationOauthEnabled: true
+        serviceLoginCredential:
+          password: password
+          username: username
+        authenticationBasicType: authenticationBasicType
+        managementAdminLoginCredential:
+          password: password
+          username: username
+          token: YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6
+      properties:
+        msgVpnName:
+          description: The name of the Message VPN.
+          type: string
+        authenticationBasicEnabled:
+          description: Whether basic authentication is enabled.
+          type: boolean
+        authenticationBasicType:
+          description: "The authentication type. This can be 'none', 'internal', or\
+            \ 'ldap'."
+          type: string
+        authenticationClientCertEnabled:
+          description: Whether client certificate authentication is enabled.
+          type: boolean
+        authenticationClientCertValidateDateEnabled:
+          description: Whether the validation of the 'Not Before' and 'Not After'
+            dates in a client certificate is enabled.
+          type: boolean
+        authenticationOauthEnabled:
+          description: Whether OAuth authentication is enabled for the Message VPN.
+          type: boolean
+        clientProfiles:
+          description: The client profiles configured on the Message VPN.
+          items:
+            $ref: '#/components/schemas/ClientProfileBase'
+          type: array
+        enabled:
+          description: Enabled
+          type: boolean
+        eventLargeMsgThreshold:
+          description: The large message threshold generates events when the size
+            of a message in a Message VPN exceeds a specified size.
+          format: int32
+          type: integer
+        managementAdminLoginCredential:
+          $ref: '#/components/schemas/ManagementLoginCredential'
+        serviceLoginCredential:
+          $ref: '#/components/schemas/LoginCredential'
+        maxConnectionCount:
+          description: |
+            The maximum number of clients that are permitted to simultaneously connect to the Message VPN.
+          format: int32
+          type: integer
+        maxEgressFlowCount:
+          description: "The maximum number of egress flows (that is, Guaranteed message\
+            \ client receive flows or consumer flows) that can be created by a single\
+            \ client."
+          format: int32
+          type: integer
+        maxEndpointCount:
+          description: The maximum number of flows that can bind to a non-exclusive
+            durable topic endpoint.
+          format: int32
+          type: integer
+        maxIngressFlowCount:
+          description: "The total permitted number of ingress flows (that is, Guaranteed\
+            \ Message client publish flows) for a Message VPN."
+          format: int32
+          type: integer
+        maxMsgSpoolUsage:
+          description: The maximum message spool usage.
+          format: int32
+          type: integer
+        maxSubscriptionCount:
+          description: The maximum number of unique subscriptions.
+          format: int32
+          type: integer
+        maxTransactedSessionCount:
+          description: The maximum number of simultaneous transacted sessions and/or
+            XA Sessions allowed for the given Message VPN.
+          format: int32
+          type: integer
+        maxTransactionCount:
+          description: The total number of simultaneous transactions (both local transactions
+            and transactions within distributed/XA transaction branches) in a Message
+            VPN.
+          format: int32
+          type: integer
+        sempOverMessageBus:
+          $ref: '#/components/schemas/SEMPOverMsgBus'
+        subDomainName:
+          description: "The generated hostname assigned for the Message VPN.  For\
+            \ example, 'mr54hcalmefac.messaging.solace.cloud'."
+          type: string
+        truststoreUri:
+          description: The URI for the SSL trust store.
+          type: string
+      type: object
+    SEMPOverMsgBus:
+      description: Whether SEMP-Over-Message-Bus attributes is enabled.
+      example:
+        sempAccessToAdminCmdsEnabled: true
+        sempOverMsgBusEnabled: true
+        sempAccessToShowCmdsEnabled: true
+        sempAccessToClientAdminCmdsEnabled: true
+        sempAccessToCacheCmdsEnabled: true
+      properties:
+        sempOverMsgBusEnabled:
+          description: "Whether SEMP over Message Bus is enabled.  When enabled for\
+            \ a Message VPN, clients have access to a limited subset of the event\
+            \ broker management commands."
+          type: boolean
+        sempAccessToShowCmdsEnabled:
+          description: Whether access to show SEMP commands is enabled.
+          type: boolean
+        sempAccessToAdminCmdsEnabled:
+          description: Whether access to SEMP commands with the admin user access-level
+            is enabled.
+          type: boolean
+        sempAccessToClientAdminCmdsEnabled:
+          description: Whether access to SEMP Client-Admin commands is enabled.
+          type: boolean
+        sempAccessToCacheCmdsEnabled:
+          description: SEMP Access to Cache Commands Enabled
+          type: boolean
+      type: object
+    ServiceClass:
+      example:
+        maxNumberVpns: 1
+        vpnMaxSpoolSize: 6
+        vpnConnections: 0
+        name: name
+        highAvailabilityCapable: true
+        id: DEVELOPER
+        type: type
+        brokerScalingTier: brokerScalingTier
+      properties:
+        id:
+          description: The identifier of the service class.
+          enum:
+          - DEVELOPER
+          - ENTERPRISE_250_STANDALONE
+          - ENTERPRISE_1K_STANDALONE
+          - ENTERPRISE_5K_STANDALONE
+          - ENTERPRISE_10K_STANDALONE
+          - ENTERPRISE_50K_STANDALONE
+          - ENTERPRISE_100K_STANDALONE
+          - ENTERPRISE_250_HIGHAVAILABILITY
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_5K_HIGHAVAILABILITY
+          - ENTERPRISE_10K_HIGHAVAILABILITY
+          - ENTERPRISE_50K_HIGHAVAILABILITY
+          - ENTERPRISE_100K_HIGHAVAILABILITY
+          type: string
+        type:
+          description: The type of object for internal informational purposes.
+          type: string
+        name:
+          description: The name of the service class.
+          type: string
+        vpnConnections:
+          description: The maximum number of client connections for the service class.
+          format: int32
+          type: integer
+        brokerScalingTier:
+          description: The underlying scaling tiers for the software event broker.
+          type: string
+        vpnMaxSpoolSize:
+          description: "The maximum message spool size of the service class, in gigabytes\
+            \ (GB)."
+          format: int32
+          type: integer
+        maxNumberVpns:
+          description: The maximum number of Message VPNs for the service class.
+          format: int32
+          type: integer
+        highAvailabilityCapable:
+          description: Whether the service class supports High-Availability. A value
+            of 'True' indicates that high-availability is supported.
+          type: boolean
+      type: object
+    ServiceClassesResponse:
+      example:
+        data:
+        - maxNumberVpns: 1
+          vpnMaxSpoolSize: 6
+          vpnConnections: 0
+          name: name
+          highAvailabilityCapable: true
+          id: DEVELOPER
+          type: type
+          brokerScalingTier: brokerScalingTier
+        - maxNumberVpns: 1
+          vpnMaxSpoolSize: 6
+          vpnConnections: 0
+          name: name
+          highAvailabilityCapable: true
+          id: DEVELOPER
+          type: type
+          brokerScalingTier: brokerScalingTier
+        meta:
+          key: "{}"
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ServiceClass'
+          type: array
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    ServiceClassResponse:
+      example:
+        data:
+          maxNumberVpns: 1
+          vpnMaxSpoolSize: 6
+          vpnConnections: 0
+          name: name
+          highAvailabilityCapable: true
+          id: DEVELOPER
+          type: type
+          brokerScalingTier: brokerScalingTier
+        meta:
+          key: "{}"
+      properties:
+        data:
+          $ref: '#/components/schemas/ServiceClass'
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    GetAllServicesResponse:
+      example:
+        data:
+        - updatedTime: 2022-03-14T15:01:34Z
+          updatedBy: updatedBy
+          datacenterId: datacenterId
+          type: type
+          eventMeshId: eventMeshId
+          creationState: creationState
+          ongoingOperationIds:
+          - ongoingOperationIds
+          - ongoingOperationIds
+          infrastructureId: infrastructureId
+          createdBy: createdBy
+          name: name
+          adminState: adminState
+          createdTime: 2022-03-14T15:01:34Z
+          id: id
+          locked: true
+          ownedBy: ownedBy
+          serviceClassId: DEVELOPER
+        - updatedTime: 2022-03-14T15:01:34Z
+          updatedBy: updatedBy
+          datacenterId: datacenterId
+          type: type
+          eventMeshId: eventMeshId
+          creationState: creationState
+          ongoingOperationIds:
+          - ongoingOperationIds
+          - ongoingOperationIds
+          infrastructureId: infrastructureId
+          createdBy: createdBy
+          name: name
+          adminState: adminState
+          createdTime: 2022-03-14T15:01:34Z
+          id: id
+          locked: true
+          ownedBy: ownedBy
+          serviceClassId: DEVELOPER
+        meta:
+          key: "{}"
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/GetServices'
+          type: array
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    GetServices:
+      example:
+        updatedTime: 2022-03-14T15:01:34Z
+        updatedBy: updatedBy
+        datacenterId: datacenterId
+        type: type
+        eventMeshId: eventMeshId
+        creationState: creationState
+        ongoingOperationIds:
+        - ongoingOperationIds
+        - ongoingOperationIds
+        infrastructureId: infrastructureId
+        createdBy: createdBy
+        name: name
+        adminState: adminState
+        createdTime: 2022-03-14T15:01:34Z
+        id: id
+        locked: true
+        ownedBy: ownedBy
+        serviceClassId: DEVELOPER
+      properties:
+        id:
+          description: The identifier of the event broker service.
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          type: string
+        name:
+          description: The name of the event broker service.
+          type: string
+        createdBy:
+          description: The unique identifier representing the user who created the
+            event broker service.
+          type: string
+        createdTime:
+          description: "The time the event broker service was created, in ISO 8601\
+            \ date/time format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        updatedBy:
+          description: The unique identifier representing the user who last updated
+            the event broker service.
+          type: string
+        updatedTime:
+          description: "The time of the last update was performed on the event broker\
+            \ service, in ISO 8601 date/time format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        ownedBy:
+          description: The unique identifier representing the user who owns the event
+            broker service.
+          type: string
+        infrastructureId:
+          description: A unique identifier representing for the infrastructure of
+            the event broker service.
+          type: string
+        datacenterId:
+          description: The identifier of the datacenter.
+          type: string
+        serviceClassId:
+          description: The service class of the event broker service.
+          enum:
+          - DEVELOPER
+          - ENTERPRISE_250_STANDALONE
+          - ENTERPRISE_1K_STANDALONE
+          - ENTERPRISE_5K_STANDALONE
+          - ENTERPRISE_10K_STANDALONE
+          - ENTERPRISE_50K_STANDALONE
+          - ENTERPRISE_100K_STANDALONE
+          - ENTERPRISE_250_HIGHAVAILABILITY
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_5K_HIGHAVAILABILITY
+          - ENTERPRISE_10K_HIGHAVAILABILITY
+          - ENTERPRISE_50K_HIGHAVAILABILITY
+          - ENTERPRISE_100K_HIGHAVAILABILITY
+          type: string
+        eventMeshId:
+          description: "The identifier of the event mesh for which the event broker\
+            \ service belongs, if applicable."
+          type: string
+        ongoingOperationIds:
+          description: The operation identifiers for an ongoing operation on the event
+            broker service.
+          items:
+            type: string
+          type: array
+        adminState:
+          description: "The administration state of the event broker service, which\
+            \ can be 'initial', 'start', 'stop' , or 'destroy'."
+          type: string
+        creationState:
+          description: "The creation state of the event broker service, one of 'pending',\
+            \ 'inProgress' , ' completed' , or 'failed'."
+          type: string
+        locked:
+          description: Whether the event broker service is locked. Locked event broker
+            services cannot be deleted.
+          type: boolean
+      type: object
+    ClientProfileSummary:
+      description: The client profile configured on the event broker service.
+      example:
+        allowGuaranteedMsgReceiveEnabled: true
+        allowGuaranteedEndpointCreateEnabled: true
+        name: name
+        allowTransactedSessionsEnabled: true
+        allowBridgeConnectionsEnabled: true
+        id: id
+        type: type
+        allowGuaranteedMsgSendEnabled: true
+      properties:
+        name:
+          description: The name of the client profile.
+          maxLength: 32
+          minLength: 1
+          pattern: "[a-zA-Z0-9-_]*"
+          type: string
+        id:
+          description: The identifier of the client profile.
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          type: string
+        allowGuaranteedMsgSendEnabled:
+          description: Indicates whether clients assigned the client profile are allowed
+            to publish guaranteed messages. The valid values are 'true' (allowed)
+            and 'false' (not allowed). The default is 'false'.
+          type: boolean
+        allowGuaranteedMsgReceiveEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to bind to topic endpoints or queues to receive guaranteed messages.
+            The valid values are 'true' (allowed) or 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        allowTransactedSessionsEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to establish transacted sessions or XA sessions. The valid values
+            are 'true' (allowed) and 'false' (not allowed). The default is 'true'.
+          type: boolean
+        allowBridgeConnectionsEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to establish Dynamic Messaging Routing (DMR) links (or bridge
+            links) from the current Message VPN to another Message VPN in a separate
+            event broker service. The valid values are 'true' (allowed) and 'false'
+            (not allowed). The default is 'false'.
+          type: boolean
+        allowGuaranteedEndpointCreateEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to create queues or topic endpoints. The valid values are 'true'
+            (allowed) and 'false' (not allowed). The default is 'false'.
+          type: boolean
+      required:
+      - name
+      type: object
+    ClientProfilesResponse:
+      example:
+        data:
+        - allowGuaranteedMsgReceiveEnabled: true
+          allowGuaranteedEndpointCreateEnabled: true
+          name: name
+          allowTransactedSessionsEnabled: true
+          allowBridgeConnectionsEnabled: true
+          id: id
+          type: type
+          allowGuaranteedMsgSendEnabled: true
+        - allowGuaranteedMsgReceiveEnabled: true
+          allowGuaranteedEndpointCreateEnabled: true
+          name: name
+          allowTransactedSessionsEnabled: true
+          allowBridgeConnectionsEnabled: true
+          id: id
+          type: type
+          allowGuaranteedMsgSendEnabled: true
+        meta:
+          key: "{}"
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ClientProfileSummary'
+          type: array
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    ClientProfile:
+      description: The client profile configured on the event broker service.
+      example:
+        apiTopicEndpointManagementCopyFromOnCreateName: apiTopicEndpointManagementCopyFromOnCreateName
+        compressionEnabled: true
+        tcpMaxWindowSize: 6
+        type: type
+        tcpMaxSegmentSize: 3
+        queueDirect2MaxDepth: 7
+        serviceSmfMinKeepaliveEnabled: true
+        id: id
+        allowSharedSubscriptionsEnabled: true
+        eventClientProvisionedEndpointSpoolUsageThreshold:
+          setPercent: 6
+          clearPercent: 6
+        queueDirect3MinMsgBurst: 5
+        queueControl1MinMsgBurst: 9
+        elidingDelay: 1
+        serviceWebMaxPayload: 1
+        serviceMinKeepaliveTimeout: 0
+        apiQueueManagementCopyFromOnCreateTemplateName: apiQueueManagementCopyFromOnCreateTemplateName
+        tlsAllowDowngradeToPlainTextEnabled: true
+        tcpKeepaliveIdleTime: 9
+        maxEndpointCountPerClientUsername: 7
+        name: name
+        queueGuaranteed1MinMsgBurst: 1
+        queueDirect2MinMsgBurst: 1
+        queueDirect1MaxDepth: 1
+        tcpCongestionWindowSize: 6
+        queueDirect3MaxDepth: 4
+        allowTransactedSessionsEnabled: true
+        allowBridgeConnectionsEnabled: true
+        serviceSmfMaxConnectionCountPerClientUsername: 5
+        allowGuaranteedMsgSendEnabled: true
+        queueDirect1MinMsgBurst: 6
+        queueGuaranteed1MaxDepth: 1
+        serviceWebInactiveTimeout: 6
+        allowGuaranteedMsgReceiveEnabled: true
+        tcpKeepaliveCount: 8
+        maxTransactionCount: 7
+        apiTopicEndpointManagementCopyFromOnCreateTemplateName: apiTopicEndpointManagementCopyFromOnCreateTemplateName
+        maxSubscriptionCount: 2
+        elidingMaxTopicCount: 2
+        queueControl1MaxDepth: 9
+        tcpKeepaliveInterval: 6
+        elidingEnabled: true
+        maxIngressFlowCount: 3
+        replicationAllowClientConnectWhenStandbyEnabled: true
+        maxEgressFlowCount: 9
+        maxTransactedSessionCount: 4
+        rejectMsgToSenderOnNoSubscriptionMatchEnabled: true
+        serviceWebMaxConnectionCountPerClientUsername: 2
+        allowGuaranteedEndpointCreateEnabled: true
+        apiQueueManagementCopyFromOnCreateName: apiQueueManagementCopyFromOnCreateName
+        maxConnectionCountPerClientUsername: 5
+      properties:
+        name:
+          description: The name of the client profile.
+          maxLength: 32
+          minLength: 1
+          pattern: "[a-zA-Z0-9-_]*"
+          type: string
+        id:
+          description: The identifier of the client profile.
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          type: string
+        allowGuaranteedMsgSendEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to publish guaranteed messages. The valid values are 'true' (allowed)
+            or 'false' (not allowed) . The default is 'false'.
+          type: boolean
+        allowGuaranteedMsgReceiveEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to bind to topic endpoints or queues to receive guaranteed messages.
+            The valid values are 'true' (allowed) or 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        compressionEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to transfer data using compression. The valid values are 'true'
+            (allowed) and 'false' (not allowed). The default is 'true'.
+          type: boolean
+        replicationAllowClientConnectWhenStandbyEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to remain connected to the Message VPN when its replication state
+            is Standby. This situation may occur when the Message VPN Replication
+            state of the event broker service changes from Active to Standby. The
+            valid values are 'true' (allowed) and 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        allowTransactedSessionsEnabled:
+          description: Indicates whether client applications client applications assigned
+            to the client profile are allowed to establish transacted sessions or
+            XA sessions. The valid values are 'true' (allowed) and 'false' (not allowed).
+            The default is 'false'.
+          type: boolean
+        allowBridgeConnectionsEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to establish Dynamic Messaging Routing (DMR) links (or bridge
+            links) from the current Message VPN to another Message VPN in a separate
+            event broker service. The valid values are 'true' (allowed) and 'false'
+            (not allowed). The default is 'false'.
+          type: boolean
+        allowGuaranteedEndpointCreateEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to create queues or topic endpoints. The valid values are 'true'
+            (allowed) and 'false' (not allowed). The default is 'false'.
+          type: boolean
+        allowSharedSubscriptionsEnabled:
+          description: Indicates whether clients assigned to the client profile are
+            allowed to use shared subscriptions. The valid values are 'true' (allowed)
+            and 'false' (not allowed). The default is 'false'.
+          type: boolean
+        apiQueueManagementCopyFromOnCreateName:
+          deprecated: true
+          description: "The name of a queue template to copy settings from when a\
+            \ new queue is created by the client using the client profile. If the\
+            \ specified queue template does not exist, creation fails. Deprecated\
+            \ since 2.14. This attribute has been replaced with apiQueueManagementCopyFromOnCreateTemplateName."
+          maxLength: 200
+          minLength: 0
+          type: string
+        apiQueueManagementCopyFromOnCreateTemplateName:
+          description: "The name of a queue template to copy settings from when a\
+            \ new queue is created by the client using the client profile. If the\
+            \ specified queue template does not exist, creation fails."
+          maxLength: 255
+          minLength: 0
+          type: string
+        apiTopicEndpointManagementCopyFromOnCreateName:
+          deprecated: true
+          description: "The name of a topic endpoint to copy settings from when a\
+            \ new topic endpoint is created by the client using the client profile.\
+            \ If the specified topic endpoint does not exist, creation fails. Deprecated\
+            \ since 2.14. This attribute has been replaced with apiTopicEndpointManagementCopyFromOnCreateTemplateName."
+          maxLength: 200
+          minLength: 0
+          type: string
+        apiTopicEndpointManagementCopyFromOnCreateTemplateName:
+          description: "The name of a topic endpoint to copy settings from when a\
+            \ new topic endpoint is created by the client using the client profile.\
+            \ If the specified topic endpoint does not exist, creation fails."
+          maxLength: 255
+          minLength: 0
+          type: string
+        serviceMinKeepaliveTimeout:
+          description: "The minimum period of time (in seconds) that the event broker\
+            \ service will tolerate inactivity on the client connection. This keepalive\
+            \ value is also enforced for MQTT and SMF (Solace Message Format) connections.\
+            \ The keepalive timeout value is calculated based on the client provided\
+            \ timeout interval (3 x the keepalive interval for SMF, 1.5 x the keepalive\
+            \ interval for MQTT). The default is 30 and valid ranges are 3–3600."
+          format: int32
+          type: integer
+        serviceSmfMinKeepaliveEnabled:
+          description: Indicates whether clients using the client profile have the
+            minimum keep-alive timeout enabled for SMF (Solace Message Format) connections.
+            The valid values are 'true' (enabled) and 'false' (not enabled). The default
+            is 'false'.
+          type: boolean
+        serviceWebInactiveTimeout:
+          description: The number of seconds a Web client has to send a request before
+            its session times out and be terminated for being inactive. The default
+            value is 30 seconds.
+          format: int32
+          type: integer
+        serviceWebMaxPayload:
+          description: |-
+            The maximum transport payload size (in bytes) before fragmentation occurs for clients using the client profile. The size of the header is not included.
+
+            Solace Message Format (SMF) messages that are sent to a consuming Web client are contained within a Web transport message that the event broker sends in its HTTP response to that client. Each Web transport message that is sent can contain multiple SMF messages or partial SMF messages.
+            The maximum Web payload value sets the maximum number of bytes allowed in a single Web transport message (not including the header). This value determines the number of SMF messages that can be sent in a single HTTP response and the size of the Web transport message sent in the HTTP response. The value range is 300 to 10000000, in bytes. The default is 1000000 bytes.
+
+            SMF messages that are sent to a consuming Web client are contained within a Web transport message that the event broker sends in its HTTP response to that client. Each Web transport message that is sent can contain multiple SMF messages or partial SMF messages.
+
+            The maximum Web payload value sets the maximum number of bytes allowed in a single Web transport message (not including the header). This value determines the number of SMF messages that can be sent in a single HTTP response and the size of the Web transport message sent in the HTTP response. Note that large SMF messages can be fragmented across Web transport messages to respect the value set for the maximum possible Web payload.
+            )
+          format: int32
+          type: integer
+        maxConnectionCountPerClientUsername:
+          description: The maximum permitted number of simultaneous Web transport
+            client connections to the event broker service that can be made using
+            the same client username account. The default is the maximum value supported
+            by the platform.
+          format: int32
+          type: integer
+        serviceSmfMaxConnectionCountPerClientUsername:
+          description: The maximum permitted number of simultaneous Solace Message
+            Format (SMF) client connections to the event broker that can be made using
+            the same client username account. The default is the maximum value supported
+            by the platform.
+          format: int32
+          type: integer
+        serviceWebMaxConnectionCountPerClientUsername:
+          description: The maximum permitted number of simultaneous Web transport
+            client connections to the event broker service that can be made using
+            the same client username account. The default is the maximum value supported
+            by the platform.
+          format: int32
+          type: integer
+        maxEndpointCountPerClientUsername:
+          description: The maximum number of durable and non-durable queues and topic
+            endpoints that can be owned by the clients using the same client username
+            within a client profile. The default is 1000.
+          format: int32
+          type: integer
+        maxEgressFlowCount:
+          description: "The maximum number of egress flows (that is, Guaranteed Message\
+            \ client receive flows or consumer flows) that can be created by a single\
+            \ client associated with this client profile. The default is 1000."
+          format: int32
+          type: integer
+        maxIngressFlowCount:
+          description: "The maximum number of ingress flows (that is, Guaranteed Message\
+            \ client publish flows) that can be created by a single client associated\
+            \ with this client profile. The default is 1000."
+          format: int32
+          type: integer
+        maxSubscriptionCount:
+          description: "The maximum number of subscriptions for a single client in\
+            \ the client profile. When you set this option, consider the total maximum\
+            \ number of permitted topic subscriptions and the total maximum number\
+            \ of client connections for the type of event broker that is used. That\
+            \ is, to ensure reliable system performance, you must find the right balance\
+            \ for your network, while staying within the system limits mentioned.\
+            \ The balance is generally between allowing the creation of many client\
+            \ applications and allowing each client to add a large number of topic\
+            \ subscriptions. The default varies by platform."
+          format: int32
+          type: integer
+        maxTransactedSessionCount:
+          description: The maximum number of simultaneous transacted sessions and/or
+            XA sessions allowed for a single client associated with the client profile.
+            The default is 10.
+          format: int32
+          type: integer
+        maxTransactionCount:
+          description: The total maximum number of simultaneous transactions (both
+            local transactions and transactions within the XA transaction branches)
+            allowed for a single client associated with the client profile. The default
+            varies by platform.
+          format: int32
+          type: integer
+        queueGuaranteed1MaxDepth:
+          description: The egress queue maximum depth for Guaranteed Messages that
+            represents the number of work units for the client priority queues. The
+            valid range is 2 to 262144. The default is 20000.
+          format: int32
+          type: integer
+        queueGuaranteed1MinMsgBurst:
+          description: "The minimum number of messages that must be on the Guaranteed\
+            \ Message queue before the queue’s depth is checked against the maximum\
+            \ depth setting (thereby allowing the queue to absorb a burst of large\
+            \ messages that exceeds the number of allowed work units). A valid range\
+            \ is 0 to 262144 with the default of 255. The value of 255 is recommended\
+            \ for memory usage optimized configurations, such as message applications;\
+            \ a value of 66000 is for WAN optimized configurations."
+          format: int32
+          type: integer
+        queueDirect1MaxDepth:
+          description: "The egress queue maximum depth for Direct Messages 1 [Class\
+            \ of Service (COS) 1] that represents the number of work units for the\
+            \ client priority queues. The valid range is 2 to 262144. The default\
+            \ is 20000.."
+          format: int32
+          type: integer
+        queueDirect1MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 1
+            (COS 1) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        queueDirect2MaxDepth:
+          description: The egress queue maximum depth for Direct Messages 2 (COS 2)
+            that represents the number of work units for the client priority queues.
+            The valid range is 2 to 262144. The default is 20000.
+          format: int32
+          type: integer
+        queueDirect2MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 2
+            (COS 2) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        queueDirect3MaxDepth:
+          description: "The egress queue maximum depth for Direct Messages 3 [Class\
+            \ of Service (COS) 3] that represents the number of work units for the\
+            \ client priority queues. The valid range is 2 to 262144. The default\
+            \ is 20000."
+          format: int32
+          type: integer
+        queueDirect3MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 3
+            (COS 3) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        queueControl1MaxDepth:
+          description: The egress queue maximum depth for Control 1 that represents
+            the number of work units for the client priority queues. The valid range
+            is 2 to 262144. The default is 20000.
+          format: int32
+          type: integer
+        queueControl1MinMsgBurst:
+          description: The minimum number of messages that must be on the Direct 1
+            (COS 1) queue before the queue’s depth is checked against the maximum
+            depth setting (thereby allowing the queue to absorb a burst of large messages
+            that exceeds the number of allowed work units). A valid range is 0 to
+            262144 with the default of 4.
+          format: int32
+          type: integer
+        tcpCongestionWindowSize:
+          description: |-
+            The TCP initial congestion window size is the number of segments that TCP sends before waiting for an acknowledgment from the peer. The TCP initial congestion window size is used when starting up a TCP connection or on recovery from idle (that is, no traffic). Larger values of the initial window allows a connection to come up to speed more quickly. For further details, refer to RFC 2581.
+            Changing the TCP initial congestion window size from its default of 2 results in non-compliance with RFC 2581. Further, if this setting is set to a value too high, it may cause congestion in the network. Contact support before you attempt to change this TCP parameter.
+          format: int32
+          type: integer
+        tcpKeepaliveCount:
+          description: The maximum number of keepalive probes (from 2 to 5 ) that
+            TCP should send before dropping the connection. The default is 5.
+          format: int32
+          type: integer
+        tcpKeepaliveIdleTime:
+          description: The time (from 3 to 120 seconds) a connection must remain idle
+            before TCP begins sending keepalive probes. The default is 3.
+          format: int32
+          type: integer
+        tcpKeepaliveInterval:
+          description: The time (from 1 to 30 seconds) to set as the interval between
+            individual keepalive probes. The default is 1.
+          format: int32
+          type: integer
+        tcpMaxSegmentSize:
+          description: The TCP maximum segment size (MSS) used for client to the event
+            broker service. The default is 1460.
+          format: int32
+          type: integer
+        tcpMaxWindowSize:
+          description: |-
+            The TCP window size between the event broker service and the client.
+            If the maximum window size is set to less than the bandwidth-delay product, then the TCP connection operates below its maximum potential throughput. If the maximum window is set to less than about twice the bandwidth-delay product, then occasional packet loss causes the TCP connection to operate below its maximum potential throughput as it handles the missing acknowledgments and retransmissions. The default is 256.
+
+            Alternately, if the TCP maximum window size is set too large, in the presence of a high offered load, TCP gradually increases its congestion window size until either the congestion window size reaches the maximum window size, or packet loss occurs in the network.
+
+            Initially, when the TCP congestion window size is small, the physical bandwidth-delay of the network acts as a memory buffer for packets in flight. But as the congestion window crosses the bandwidth-delay product, the buffering of in-flight packets moves to queues in event broker services and other equipment throughout the network. As the TCP congestion window continues to increase in size, these various equipment queues overflow, causing packet loss and TCP backoff.
+          format: int32
+          type: integer
+        elidingDelay:
+          description: The amount of time to delay the delivery of messages to a client
+            after the initial message has been delivered. You can specify a value
+            from 0-6000 milliseconds. The default is 0.
+          format: int32
+          type: integer
+        elidingEnabled:
+          description: "Indicates whether clients assigned to the client profile are\
+            \ allowed to use eliding. Eliding allows clients to define a custom per-topic\
+            \ rate for client applications so they can effectively consume relevant\
+            \ messages, rather than queuing up outdated messages. For example, when\
+            \ eliding is configured, clients could receive direct messages for their\
+            \ topic subscriptions at a rate of at most five per second, per topic–\
+            even though the source is publishing updates at a much higher rate. The\
+            \ valid values are 'true' (enabled) and 'false' (not enabled). The default\
+            \ is 'false'."
+          type: boolean
+        elidingMaxTopicCount:
+          description: The maximum number of topics the event broker service that
+            can track for performing the eliding function on each client connection.
+            You can specify a value from 1-320000. The default is 256.
+          format: int32
+          type: integer
+        rejectMsgToSenderOnNoSubscriptionMatchEnabled:
+          description: Indicates whether clients assigned the client profile are allowed
+            to return NACKs (negative acknowledgements) for guaranteed messages that
+            do not have a that do not have a matching guaranteed message subscription.
+            The value values are 'true' (allowed) and 'false' (not allowed). The default
+            is 'false'.
+          type: boolean
+        tlsAllowDowngradeToPlainTextEnabled:
+          description: "Indicates whether clients assigned the client profile are\
+            \ allowed to use TLS/SSL encryption to protect the clients' credentials.\
+            \ This setting doesn't encrypt the data that is transmitted after the\
+            \ clients are authenticated and authorized. This also allows connecting\
+            \ client applications to request to downgrade of their TLS/SSL connections\
+            \ to the Message VPN to a plain-text connection, and if that Message VPN\
+            \ allows TLS/SSL connection downgrades, after the clientsʼ login handshake\
+            \ are finished, their connections are downgraded. This means that the\
+            \ clientsʼ authentication data is still encrypted, but the subsequent\
+            \ application data that is transmitted is sent as non-encrypted plain-text.\
+            \ The valid values are 'true (allowed) or 'false (not allowed). The default\
+            \ is 'true'."
+          type: boolean
+        eventClientProvisionedEndpointSpoolUsageThreshold:
+          $ref: '#/components/schemas/ProvisionedEndpointSpoolUsageAlertThresholds'
+      required:
+      - name
+      type: object
+    ClientProfileResponse:
+      example:
+        data:
+          apiTopicEndpointManagementCopyFromOnCreateName: apiTopicEndpointManagementCopyFromOnCreateName
+          compressionEnabled: true
+          tcpMaxWindowSize: 6
+          type: type
+          tcpMaxSegmentSize: 3
+          queueDirect2MaxDepth: 7
+          serviceSmfMinKeepaliveEnabled: true
+          id: id
+          allowSharedSubscriptionsEnabled: true
+          eventClientProvisionedEndpointSpoolUsageThreshold:
+            setPercent: 6
+            clearPercent: 6
+          queueDirect3MinMsgBurst: 5
+          queueControl1MinMsgBurst: 9
+          elidingDelay: 1
+          serviceWebMaxPayload: 1
+          serviceMinKeepaliveTimeout: 0
+          apiQueueManagementCopyFromOnCreateTemplateName: apiQueueManagementCopyFromOnCreateTemplateName
+          tlsAllowDowngradeToPlainTextEnabled: true
+          tcpKeepaliveIdleTime: 9
+          maxEndpointCountPerClientUsername: 7
+          name: name
+          queueGuaranteed1MinMsgBurst: 1
+          queueDirect2MinMsgBurst: 1
+          queueDirect1MaxDepth: 1
+          tcpCongestionWindowSize: 6
+          queueDirect3MaxDepth: 4
+          allowTransactedSessionsEnabled: true
+          allowBridgeConnectionsEnabled: true
+          serviceSmfMaxConnectionCountPerClientUsername: 5
+          allowGuaranteedMsgSendEnabled: true
+          queueDirect1MinMsgBurst: 6
+          queueGuaranteed1MaxDepth: 1
+          serviceWebInactiveTimeout: 6
+          allowGuaranteedMsgReceiveEnabled: true
+          tcpKeepaliveCount: 8
+          maxTransactionCount: 7
+          apiTopicEndpointManagementCopyFromOnCreateTemplateName: apiTopicEndpointManagementCopyFromOnCreateTemplateName
+          maxSubscriptionCount: 2
+          elidingMaxTopicCount: 2
+          queueControl1MaxDepth: 9
+          tcpKeepaliveInterval: 6
+          elidingEnabled: true
+          maxIngressFlowCount: 3
+          replicationAllowClientConnectWhenStandbyEnabled: true
+          maxEgressFlowCount: 9
+          maxTransactedSessionCount: 4
+          rejectMsgToSenderOnNoSubscriptionMatchEnabled: true
+          serviceWebMaxConnectionCountPerClientUsername: 2
+          allowGuaranteedEndpointCreateEnabled: true
+          apiQueueManagementCopyFromOnCreateName: apiQueueManagementCopyFromOnCreateName
+          maxConnectionCountPerClientUsername: 5
+        meta:
+          key: "{}"
+      properties:
+        data:
+          $ref: '#/components/schemas/ClientProfile'
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    Datacenter:
+      example:
+        updatedTime: 2022-03-14T15:01:34Z
+        updatedBy: updatedBy
+        datacenterType: SolacePublic
+        available: true
+        supportedServiceClasses:
+        - supportedServiceClasses
+        - supportedServiceClasses
+        k8sServiceType: LoadBalancer
+        type: type
+        numSupportedPublicEndpoints: 6
+        organizationId: organizationId
+        provider: aws
+        createdBy: createdBy
+        operState: up
+        cloudAgentVersion: cloudAgentVersion
+        name: name
+        numSupportedPrivateEndpoints: 0
+        createdTime: 2022-03-14T15:01:34Z
+        location:
+          continent: continent
+          latitude: latitude
+          longitude: longitude
+        id: id
+        spoolScaleUpCapabilityInfo:
+          spoolScaleUpCapabilityState: IN_PROGRESS
+          spoolScaleUpTestTimestamp: 2022-03-14T15:01:34Z
+          spoolScaleUpTestMessage: spoolScaleUpTestMessage
+      properties:
+        id:
+          description: The identifier of the datacenter.
+          type: string
+        type:
+          description: The type of object for informational purposes.
+          type: string
+        name:
+          description: The name of the datacenter.
+          type: string
+        datacenterType:
+          description: "The type of the datacenter, in terms of ownership. The valus\
+            \ can be a Public Region( 'SolacePublic'), a Dedicated Region('SolaceDedicated'),\
+            \ or a Customer-Controlled Region ('CustomerCloud' or 'CustomerOnPrem')."
+          example: SolacePublic
+          pattern: ^Unknown$|^SolacePublic$|^SolaceDedicated$|^CustomerCloud$|^CustomerOnPrem$
+          type: string
+        provider:
+          description: The name of the cloud provider for the datacenter.
+          example: aws
+          type: string
+        operState:
+          description: The operational state of the datacenter. The values can be
+            'up' or 'down'.
+          example: up
+          pattern: ^up$|^down$
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        createdBy:
+          description: The unique identifier representing the user who created the
+            datacenter.
+          type: string
+        createdTime:
+          description: "The time the datacenter was created, in ISO 8601 date/time\
+            \ format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        updatedBy:
+          description: The unique identifier representing the user who last updated
+            the datacenter.
+          type: string
+        updatedTime:
+          description: "The time of the last update was performed on the datacenter,\
+            \ in ISO 8601 date/time format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        available:
+          description: Whether the datacenter is available.
+          type: boolean
+        supportedServiceClasses:
+          description: The list of supported service classes in the datacenter.
+          items:
+            type: string
+          type: array
+        cloudAgentVersion:
+          description: The version of the Mission Control Agent.
+          type: string
+        k8sServiceType:
+          description: The type of the Kubernetes service. The values can be 'LoadBalancer'
+            or 'NodePort'.
+          example: LoadBalancer
+          type: string
+        numSupportedPrivateEndpoints:
+          description: The number of supported private endpoints.
+          format: int32
+          type: integer
+        numSupportedPublicEndpoints:
+          description: The number of supported public endpoints.
+          format: int32
+          type: integer
+        organizationId:
+          description: The identifier of the datacenter's organization.
+          type: string
+        spoolScaleUpCapabilityInfo:
+          $ref: '#/components/schemas/SpoolScaleUpCapabilityInfo'
+      required:
+      - available
+      - datacenterType
+      - name
+      - operState
+      - provider
+      type: object
+    DatacentersResponse:
+      example:
+        data:
+        - updatedTime: 2022-03-14T15:01:34Z
+          updatedBy: updatedBy
+          datacenterType: SolacePublic
+          available: true
+          supportedServiceClasses:
+          - supportedServiceClasses
+          - supportedServiceClasses
+          k8sServiceType: LoadBalancer
+          type: type
+          numSupportedPublicEndpoints: 6
+          organizationId: organizationId
+          provider: aws
+          createdBy: createdBy
+          operState: up
+          cloudAgentVersion: cloudAgentVersion
+          name: name
+          numSupportedPrivateEndpoints: 0
+          createdTime: 2022-03-14T15:01:34Z
+          location:
+            continent: continent
+            latitude: latitude
+            longitude: longitude
+          id: id
+          spoolScaleUpCapabilityInfo:
+            spoolScaleUpCapabilityState: IN_PROGRESS
+            spoolScaleUpTestTimestamp: 2022-03-14T15:01:34Z
+            spoolScaleUpTestMessage: spoolScaleUpTestMessage
+        - updatedTime: 2022-03-14T15:01:34Z
+          updatedBy: updatedBy
+          datacenterType: SolacePublic
+          available: true
+          supportedServiceClasses:
+          - supportedServiceClasses
+          - supportedServiceClasses
+          k8sServiceType: LoadBalancer
+          type: type
+          numSupportedPublicEndpoints: 6
+          organizationId: organizationId
+          provider: aws
+          createdBy: createdBy
+          operState: up
+          cloudAgentVersion: cloudAgentVersion
+          name: name
+          numSupportedPrivateEndpoints: 0
+          createdTime: 2022-03-14T15:01:34Z
+          location:
+            continent: continent
+            latitude: latitude
+            longitude: longitude
+          id: id
+          spoolScaleUpCapabilityInfo:
+            spoolScaleUpCapabilityState: IN_PROGRESS
+            spoolScaleUpTestTimestamp: 2022-03-14T15:01:34Z
+            spoolScaleUpTestMessage: spoolScaleUpTestMessage
+        meta:
+          key: "{}"
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Datacenter'
+          type: array
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    Location:
+      example:
+        continent: continent
+        latitude: latitude
+        longitude: longitude
+      properties:
+        longitude:
+          description: The longitude coordinate of the location for the datacenter.
+          type: string
+        latitude:
+          description: The latitude coordinate of the location for the datacenter.
+          type: string
+        continent:
+          description: The name of the continent where the datacenter is located.
+          type: string
+      required:
+      - continent
+      - latitude
+      - longitude
+      type: object
+    SpoolScaleUpCapabilityInfo:
+      example:
+        spoolScaleUpCapabilityState: IN_PROGRESS
+        spoolScaleUpTestTimestamp: 2022-03-14T15:01:34Z
+        spoolScaleUpTestMessage: spoolScaleUpTestMessage
+      properties:
+        spoolScaleUpCapabilityState:
+          description: "The current state of  the Scalable Message Spool Size feature.\
+            \ The values can be 'INPROGRESS', 'SUPPORTED', 'NOT SUPPORTED', or 'UNKNOWN'."
+          example: IN_PROGRESS
+          pattern: ^UNKNOWN$|^IN_PROGRESS$|^SUPPORTED$|^NOT_SUPPORTED$
+          type: string
+        spoolScaleUpTestTimestamp:
+          description: "The time of the last test was performed, in ISO 8601 date/time\
+            \ format."
+          example: 2022-03-14T15:01:34Z
+          format: date-time
+          type: string
+        spoolScaleUpTestMessage:
+          description: Message resulting from a self-test of support for the Scalable
+            Message Spool Size feature.
+          type: string
+      type: object
+    DatacenterResponse:
+      example:
+        data:
+          updatedTime: 2022-03-14T15:01:34Z
+          updatedBy: updatedBy
+          datacenterType: SolacePublic
+          available: true
+          supportedServiceClasses:
+          - supportedServiceClasses
+          - supportedServiceClasses
+          k8sServiceType: LoadBalancer
+          type: type
+          numSupportedPublicEndpoints: 6
+          organizationId: organizationId
+          provider: aws
+          createdBy: createdBy
+          operState: up
+          cloudAgentVersion: cloudAgentVersion
+          name: name
+          numSupportedPrivateEndpoints: 0
+          createdTime: 2022-03-14T15:01:34Z
+          location:
+            continent: continent
+            latitude: latitude
+            longitude: longitude
+          id: id
+          spoolScaleUpCapabilityInfo:
+            spoolScaleUpCapabilityState: IN_PROGRESS
+            spoolScaleUpTestTimestamp: 2022-03-14T15:01:34Z
+            spoolScaleUpTestMessage: spoolScaleUpTestMessage
+        meta:
+          key: "{}"
+      properties:
+        data:
+          $ref: '#/components/schemas/Datacenter'
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+    Capabilities:
+      description: Event broker service capabilities.
+      type: object
+    EventBrokerServiceVersion:
+      description: The event broker service version.
+      example:
+        capabilities: "{}"
+        supportedServiceClasses:
+        - DEVELOPER
+        - ENTERPRISE_1K_HIGHAVAILABILITY
+        - ENTERPRISE_1K_STANDALONE
+        version: 10.0.1.62-0
+      properties:
+        version:
+          description: Event broker service version.
+          example: 10.0.1.62-0
+          type: string
+        supportedServiceClasses:
+          description: Supported service classes.
+          example:
+          - DEVELOPER
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_1K_STANDALONE
+          items:
+            description: Supported service classes.
+            example: "[\"DEVELOPER\",\"ENTERPRISE_1K_HIGHAVAILABILITY\",\"ENTERPRISE_1K_STANDALONE\"\
+              ]"
+            type: string
+          type: array
+        capabilities:
+          description: Event broker service capabilities.
+          type: object
+      required:
+      - supportedServiceClasses
+      - version
+      type: object
+    EventBrokerServiceVersions:
+      example:
+        data:
+        - capabilities: "{}"
+          supportedServiceClasses:
+          - DEVELOPER
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_1K_STANDALONE
+          version: 10.0.1.62-0
+        - capabilities: "{}"
+          supportedServiceClasses:
+          - DEVELOPER
+          - ENTERPRISE_1K_HIGHAVAILABILITY
+          - ENTERPRISE_1K_STANDALONE
+          version: 10.0.1.62-0
+        meta:
+          key: "{}"
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/EventBrokerServiceVersion'
+          type: array
+        meta:
+          additionalProperties:
+            type: object
+          type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+  samples-enabled: true
