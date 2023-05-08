@@ -29,3 +29,4 @@ See the list of [contributors](https://github.com/solacecommunity/<github-repo>/
 
 ## License
 See the [LICENSE](LICENSE) file for details.
+
